@@ -1,3 +1,3 @@
-# iScan
+# iSkan
 
-API Driven, Cloud Native Container Image Scan
+API Driven, Cloud Native Container Image Scan for Kubernetes
