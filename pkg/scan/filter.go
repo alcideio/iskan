@@ -1,7 +1,7 @@
 package scan
 
 import (
-	"github.com/alcideio/iskan/api"
+	"github.com/alcideio/iskan/types"
 	"google.golang.org/genproto/googleapis/grafeas/v1"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/klog"
@@ -9,16 +9,16 @@ import (
 )
 
 type ScanFilter interface {
-	ShouldScan(policy *api.Policy, pod *v1.Pod, image string) bool
+	ShouldScan(policy *types.Policy, pod *v1.Pod, image string) bool
 }
 
 type ResultFilter interface {
-	IncludeResult(policy *api.Policy, occurence *grafeas.Occurrence) bool
+	IncludeResult(policy *types.Policy, occurence *grafeas.Occurrence) bool
 }
 
 type scanFilter struct{}
 
-func (s *scanFilter) ShouldScan(policy *api.Policy, pod *v1.Pod, image string) bool {
+func (s *scanFilter) ShouldScan(policy *types.Policy, pod *v1.Pod, image string) bool {
 	include := policy.ScanScope.IsNamespaceIncluded(pod.Namespace)
 	if !include {
 		return false
@@ -29,7 +29,7 @@ func (s *scanFilter) ShouldScan(policy *api.Policy, pod *v1.Pod, image string) b
 
 type resultFilter struct{}
 
-func (r *resultFilter) IncludeResult(policy *api.Policy, occurence *grafeas.Occurrence) bool {
+func (r *resultFilter) IncludeResult(policy *types.Policy, occurence *grafeas.Occurrence) bool {
 	if policy == nil || policy.ReportFilter == nil || occurence == nil {
 		klog.V(7).Infof("IncludeResult - yes")
 		return true

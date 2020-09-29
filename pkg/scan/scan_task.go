@@ -5,9 +5,9 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/alcideio/iskan/api"
 	"github.com/alcideio/iskan/pkg/registry"
 	"github.com/alcideio/iskan/pkg/util"
+	"github.com/alcideio/iskan/types"
 	dockerref "github.com/docker/distribution/reference"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/util/errors"
@@ -15,7 +15,7 @@ import (
 	"k8s.io/klog"
 )
 
-func RegistryConfigForImage(image string, registriesConfig map[string]*api.RegistryConfig) *api.RegistryConfig {
+func RegistryConfigForImage(image string, registriesConfig map[string]*types.RegistryConfig) *types.RegistryConfig {
 	repo, _, _, _ := util.ParseImageName(image)
 
 	if config, exist := registriesConfig[repo]; exist {
@@ -39,19 +39,19 @@ func RegistryConfigForImage(image string, registriesConfig map[string]*api.Regis
 		klog.V(5).Infof("Failed to detect registry kind from image name - %v", repo)
 	}
 
-	return &api.RegistryConfig{
+	return &types.RegistryConfig{
 		Kind: kind,
 	}
 }
 
 type ScanTaskResult struct {
-	Findings map[string]*api.ImageScanResult
+	Findings map[string]*types.ImageScanResult
 
 	ScannedPods []*v1.Pod
 	SkippedPods []*v1.Pod
 }
 
-func ScanTask(pods []v1.Pod, policy *api.Policy, registriesConfig map[string]*api.RegistryConfig) (*ScanTaskResult, error) {
+func ScanTask(pods []v1.Pod, policy *types.Policy, registriesConfig map[string]*types.RegistryConfig) (*ScanTaskResult, error) {
 	scanTaskREsult := &ScanTaskResult{
 		Findings:    nil,
 		ScannedPods: []*v1.Pod{},
@@ -104,7 +104,7 @@ func ScanTask(pods []v1.Pod, policy *api.Policy, registriesConfig map[string]*ap
 
 	images := containers.List()
 	wg := sync.WaitGroup{}
-	results := map[string]*api.ImageScanResult{}
+	results := map[string]*types.ImageScanResult{}
 	resLock := sync.Mutex{}
 
 	for _, image := range images {

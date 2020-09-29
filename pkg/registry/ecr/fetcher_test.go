@@ -2,7 +2,7 @@ package ecr
 
 import (
 	"fmt"
-	"github.com/alcideio/iskan/api"
+	"github.com/alcideio/iskan/types"
 	"testing"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -191,7 +191,7 @@ func (m *mockECRClient) DescribeImageScanFindings(input *ecr.DescribeImageScanFi
 func (suite *ECRTestSuite) TestGetNoVulnerabilityDetail() {
 	client := &mockECRClient{}
 
-	vulnerabilityOccurences, err := getImageScanFindings(client, &api.ScanScope{}, ecrRepo+":zerovulnerabilities")
+	vulnerabilityOccurences, err := getImageScanFindings(client, &types.ScanScope{}, ecrRepo+":zerovulnerabilities")
 	assert.NoError(suite.T(), err)
 	assert.Len(suite.T(), vulnerabilityOccurences, 0)
 }
@@ -199,7 +199,7 @@ func (suite *ECRTestSuite) TestGetNoVulnerabilityDetail() {
 func (suite *ECRTestSuite) TestGetOneVulnerabilityDetail() {
 	client := &mockECRClient{}
 
-	result, err := getImageScanFindings(client, &api.ScanScope{}, ecrRepo+":singlevulnerability")
+	result, err := getImageScanFindings(client, &types.ScanScope{}, ecrRepo+":singlevulnerability")
 	assert.NoError(suite.T(), err)
 
 	fmt.Printf("'%v' \n %+v", len(result), pretty.Sprint(result))
@@ -214,7 +214,7 @@ func (suite *ECRTestSuite) TestGetOneVulnerabilityDetail() {
 func (suite *ECRTestSuite) TestGetMultipleVulnerabilityDetail() {
 	client := &mockECRClient{}
 
-	result, err := getImageScanFindings(client, &api.ScanScope{}, ecrRepo+":manyvulnerabilities")
+	result, err := getImageScanFindings(client, &types.ScanScope{}, ecrRepo+":manyvulnerabilities")
 	assert.NoError(suite.T(), err)
 
 	assert.Len(suite.T(), result, 6)
@@ -228,7 +228,7 @@ func (suite *ECRTestSuite) TestGetMultipleVulnerabilityDetail() {
 func (suite *ECRTestSuite) TestBadInput() {
 	client := &mockECRClient{}
 
-	_, err := getImageScanFindings(client, &api.ScanScope{}, ecrRepo+":nonExistentImage")
+	_, err := getImageScanFindings(client, &types.ScanScope{}, ecrRepo+":nonExistentImage")
 	assert.Error(suite.T(), err)
 
 }

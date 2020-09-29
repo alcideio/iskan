@@ -3,20 +3,20 @@ package scan
 import (
 	"context"
 
-	"github.com/alcideio/iskan/api"
 	"github.com/alcideio/iskan/pkg/registry"
+	"github.com/alcideio/iskan/types"
 	"google.golang.org/genproto/googleapis/grafeas/v1"
 	"k8s.io/klog"
 )
 
-func ScanImage(image string, policy *api.Policy, config *api.RegistryConfig) (*api.ImageScanResult, error) {
+func ScanImage(image string, policy *types.Policy, config *types.RegistryConfig) (*types.ImageScanResult, error) {
 	klog.V(5).Infof("[image=%v][%+v]", image, *config)
 
-	summary := api.NewSeveritySummary()
+	summary := types.NewSeveritySummary()
 
 	s, err := registry.NewImageVulnerabilitiesFinder(config.Kind, &config.Creds)
 	if err != nil {
-		return &api.ImageScanResult{
+		return &types.ImageScanResult{
 			Image:       image,
 			CompletedOK: false,
 			Reason:      err.Error(),
@@ -27,7 +27,7 @@ func ScanImage(image string, policy *api.Policy, config *api.RegistryConfig) (*a
 
 	res, err := s.ListOccurrences(context.Background(), image)
 	if err != nil {
-		return &api.ImageScanResult{
+		return &types.ImageScanResult{
 			Image:       image,
 			CompletedOK: false,
 			Reason:      err.Error(),
@@ -38,7 +38,7 @@ func ScanImage(image string, policy *api.Policy, config *api.RegistryConfig) (*a
 
 	filter := RuntimeResultFilter
 	filtered := []*grafeas.Occurrence{}
-	result := &api.ImageScanResult{
+	result := &types.ImageScanResult{
 		Image:       image,
 		CompletedOK: true,
 		Reason:      "",

@@ -3,8 +3,8 @@ package ecr
 import (
 	"context"
 	"fmt"
-	"github.com/alcideio/iskan/api"
 	"github.com/alcideio/iskan/pkg/util"
+	"github.com/alcideio/iskan/types"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/ecr"
@@ -17,7 +17,7 @@ type imageVulnerabilitiesFinder struct {
 	client ecrClient
 }
 
-func NewImageVulnerabilitiesFinder(cred *api.RegistryAPICreds) (api.ImageVulnerabilitiesFinder, error) {
+func NewImageVulnerabilitiesFinder(cred *types.RegistryAPICreds) (types.ImageVulnerabilitiesFinder, error) {
 	// AWS Session
 	sess := session.Must(session.NewSessionWithOptions(session.Options{
 		Config:            *aws.NewConfig(),
@@ -37,20 +37,20 @@ func (i *imageVulnerabilitiesFinder) Type() string {
 	return "ecr"
 }
 
-func (i *imageVulnerabilitiesFinder) ListOccurrences(ctx context.Context, containerImage string) (*api.ImageScanResult, error) {
+func (i *imageVulnerabilitiesFinder) ListOccurrences(ctx context.Context, containerImage string) (*types.ImageScanResult, error) {
 	findings, err := getImageScanFindings(i.client, nil, containerImage)
 	if err != nil {
 		return nil, err
 	}
 
-	return &api.ImageScanResult{Findings: findings}, nil
+	return &types.ImageScanResult{Findings: findings}, nil
 }
 
 type ecrClient interface {
 	DescribeImageScanFindings(input *ecr.DescribeImageScanFindingsInput) (*ecr.DescribeImageScanFindingsOutput, error)
 }
 
-func getImageScanFindings(ecrclient ecrClient, policy *api.ScanScope, containerImage string) ([]*grafeas.Occurrence, error) {
+func getImageScanFindings(ecrclient ecrClient, policy *types.ScanScope, containerImage string) ([]*grafeas.Occurrence, error) {
 	repo, tag, digest, err := util.ParseImageName(containerImage)
 	if err != nil {
 		return nil, err

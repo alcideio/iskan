@@ -6,9 +6,9 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/alcideio/iskan/api"
 	"github.com/alcideio/iskan/pkg/registry/ecr"
 	"github.com/alcideio/iskan/pkg/registry/gcr"
+	"github.com/alcideio/iskan/types"
 )
 
 const (
@@ -19,7 +19,7 @@ const (
 	RegistryKind_UNKNOWN string = "unknown"
 )
 
-func NewImageVulnerabilitiesFinder(kind string, cred *api.RegistryAPICreds) (api.ImageVulnerabilitiesFinder, error) {
+func NewImageVulnerabilitiesFinder(kind string, cred *types.RegistryAPICreds) (types.ImageVulnerabilitiesFinder, error) {
 	switch strings.ToLower(kind) {
 	case RegistryKind_ECR:
 		return ecr.NewImageVulnerabilitiesFinder(cred)

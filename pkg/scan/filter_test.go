@@ -1,7 +1,7 @@
 package scan
 
 import (
-	"github.com/alcideio/iskan/api"
+	"github.com/alcideio/iskan/types"
 	"github.com/kylelemons/godebug/pretty"
 	"google.golang.org/genproto/googleapis/grafeas/v1"
 	"testing"
@@ -32,15 +32,15 @@ var finding = grafeas.Occurrence{
 
 func Test_ResultFilter(t *testing.T) {
 	type test struct {
-		policy          *api.Policy
+		policy          *types.Policy
 		finding         *grafeas.Occurrence
 		includeExpected bool
 	}
 
 	tests := []test{
 		{
-			policy: func() *api.Policy {
-				p := api.NewDefaultPolicy()
+			policy: func() *types.Policy {
+				p := types.NewDefaultPolicy()
 				p.ReportFilter.Severities = "HIGH,CRITICAL"
 				return p
 			}(),
@@ -48,8 +48,8 @@ func Test_ResultFilter(t *testing.T) {
 			includeExpected: true,
 		},
 		{
-			policy: func() *api.Policy {
-				p := api.NewDefaultPolicy()
+			policy: func() *types.Policy {
+				p := types.NewDefaultPolicy()
 				p.ReportFilter.Severities = "MEDIUM"
 				return p
 			}(),

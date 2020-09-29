@@ -7,10 +7,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/alcideio/iskan/api"
 	"github.com/alcideio/iskan/pkg/report"
 	"github.com/alcideio/iskan/pkg/scan"
 	"github.com/alcideio/iskan/pkg/util"
+	"github.com/alcideio/iskan/types"
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 	"sigs.k8s.io/yaml"
@@ -18,8 +18,8 @@ import (
 
 func NewCommandScanCluster() *cobra.Command {
 	clusterContext := ""
-	cliReportFilter := *(api.NewDefaultPolicy().ReportFilter)
-	policy := api.NewDefaultPolicy()
+	cliReportFilter := *(types.NewDefaultPolicy().ReportFilter)
+	policy := types.NewDefaultPolicy()
 	format := ""
 	outfile := "-"
 	vulAPIConfig := ""
@@ -31,14 +31,14 @@ func NewCommandScanCluster() *cobra.Command {
 		RunE: func(cmd *cobra.Command, args []string) error {
 			var err error
 
-			config, err := api.LoadRegistriesConfig(vulAPIConfig)
+			config, err := types.LoadRegistriesConfig(vulAPIConfig)
 			if err != nil {
 				return err
 			}
 
-			var reportFilter *api.ReportFilter
+			var reportFilter *types.ReportFilter
 			if reportConfig != "" {
-				reportFilter, err = api.LoadReportFilter(reportConfig)
+				reportFilter, err = types.LoadReportFilter(reportConfig)
 				if err != nil {
 					return err
 				}

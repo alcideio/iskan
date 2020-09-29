@@ -6,15 +6,15 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/alcideio/iskan/api"
 	"github.com/alcideio/iskan/pkg/util"
+	"github.com/alcideio/iskan/types"
 	"github.com/olekukonko/tablewriter"
 	"google.golang.org/genproto/googleapis/grafeas/v1"
 	"k8s.io/apimachinery/pkg/util/json"
 	"sigs.k8s.io/yaml"
 )
 
-func reportImageScanResultAsTable(res *api.ImageScanResult, w io.WriteCloser) error {
+func reportImageScanResultAsTable(res *types.ImageScanResult, w io.WriteCloser) error {
 
 	table := tablewriter.NewWriter(w)
 	table.SetHeader([]string{"SCAN INFO", ""})
@@ -89,7 +89,7 @@ func reportImageScanResultAsTable(res *api.ImageScanResult, w io.WriteCloser) er
 	return nil
 }
 
-func ReportImageScanResult(format string, res *api.ImageScanResult, w io.WriteCloser) error {
+func ReportImageScanResult(format string, res *types.ImageScanResult, w io.WriteCloser) error {
 	switch format {
 	case "table":
 		return reportImageScanResultAsTable(res, w)

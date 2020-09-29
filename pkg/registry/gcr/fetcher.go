@@ -16,15 +16,15 @@ import (
 	grafeaspb "google.golang.org/genproto/googleapis/grafeas/v1"
 	"k8s.io/klog"
 
-	"github.com/alcideio/iskan/api"
 	"github.com/alcideio/iskan/pkg/util"
+	"github.com/alcideio/iskan/types"
 )
 
 type imageVulnerabilitiesFinder struct {
 	client *containeranalysis.Client
 }
 
-func NewImageVulnerabilitiesFinder(cred *api.RegistryAPICreds) (api.ImageVulnerabilitiesFinder, error) {
+func NewImageVulnerabilitiesFinder(cred *types.RegistryAPICreds) (types.ImageVulnerabilitiesFinder, error) {
 	var client *containeranalysis.Client
 	var err error
 	ctx := context.Background()
@@ -54,7 +54,7 @@ func (i *imageVulnerabilitiesFinder) Type() string {
 	return "gcr"
 }
 
-func (i *imageVulnerabilitiesFinder) ListOccurrences(ctx context.Context, containerImage string) (*api.ImageScanResult, error) {
+func (i *imageVulnerabilitiesFinder) ListOccurrences(ctx context.Context, containerImage string) (*types.ImageScanResult, error) {
 	repo, _, _, err := util.ParseImageName(containerImage)
 	if err != nil {
 		return nil, err
@@ -76,7 +76,7 @@ func (i *imageVulnerabilitiesFinder) ListOccurrences(ctx context.Context, contai
 		return nil, err
 	}
 
-	return &api.ImageScanResult{Findings: findings}, nil
+	return &types.ImageScanResult{Findings: findings}, nil
 }
 
 // findVulnerabilityOccurrencesForImage retrieves all vulnerability Occurrences associated with a resource.

@@ -6,10 +6,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/alcideio/iskan/api"
 	"github.com/alcideio/iskan/pkg/advisor"
 	"github.com/alcideio/iskan/pkg/kube"
 	"github.com/alcideio/iskan/pkg/version"
+	"github.com/alcideio/iskan/types"
 	"github.com/kylelemons/godebug/pretty"
 	"google.golang.org/genproto/googleapis/grafeas/v1"
 	v1 "k8s.io/api/core/v1"
@@ -20,15 +20,15 @@ import (
 )
 
 type ClusterScanner struct {
-	Policy           *api.Policy
-	RegistriesConfig api.RegistriesConfig
+	Policy           *types.Policy
+	RegistriesConfig types.RegistriesConfig
 
 	client *kube.KubeClient
 
 	advisorReport *advisor.AdvisorClusterReport
 }
 
-func NewClusterScanner(clusterContext string, policy *api.Policy, registriesConfig *api.RegistriesConfig) (*ClusterScanner, error) {
+func NewClusterScanner(clusterContext string, policy *types.Policy, registriesConfig *types.RegistriesConfig) (*ClusterScanner, error) {
 	client, err := kube.NewClient(clusterContext)
 	if err != nil {
 		return nil, fmt.Errorf("Failed to create kubernetes client - %v", err)
@@ -41,8 +41,8 @@ func NewClusterScanner(clusterContext string, policy *api.Policy, registriesConf
 	}, nil
 }
 
-func (cs *ClusterScanner) generateSummary(res *ScanTaskResult) (*api.ClusterScanReportSummary, error) {
-	summary := api.NewClusterScanReportSummary()
+func (cs *ClusterScanner) generateSummary(res *ScanTaskResult) (*types.ClusterScanReportSummary, error) {
+	summary := types.NewClusterScanReportSummary()
 
 	summary.AnalyzedPodCount = uint32(len(res.ScannedPods))
 	summary.ExcludedPodCount = uint32(len(res.SkippedPods))
@@ -54,7 +54,7 @@ func (cs *ClusterScanner) generateSummary(res *ScanTaskResult) (*api.ClusterScan
 	failedImages := sets.NewString()
 
 	for _, pod := range res.ScannedPods {
-		podSummary := api.NewSeveritySummary()
+		podSummary := types.NewSeveritySummary()
 
 		podContainers := [][]v1.ContainerStatus{
 			pod.Status.InitContainerStatuses,
@@ -90,7 +90,7 @@ func (cs *ClusterScanner) generateSummary(res *ScanTaskResult) (*api.ClusterScan
 		summary.FailedOrSkippedImages = failedImages.List()
 
 		if !skipped {
-			podSpecInfo := api.PodSpecSummary{
+			podSpecInfo := types.PodSpecSummary{
 				Name:         pod.Name,
 				Namespace:    pod.Namespace,
 				Spec:         &pod.Spec,
@@ -104,7 +104,7 @@ func (cs *ClusterScanner) generateSummary(res *ScanTaskResult) (*api.ClusterScan
 
 			nsSummary, exist := summary.NamespaceSeverity[pod.Namespace]
 			if !exist {
-				nsSummary = api.NewSeveritySummary()
+				nsSummary = types.NewSeveritySummary()
 			}
 			nsSummary.Add(podSummary)
 			summary.NamespaceSeverity[pod.Namespace] = nsSummary
@@ -120,19 +120,19 @@ func (cs *ClusterScanner) GetAdvisorReport() *advisor.AdvisorClusterReport {
 	return cs.advisorReport
 }
 
-func (cs *ClusterScanner) Scan() (*api.ClusterScanReport, error) {
+func (cs *ClusterScanner) Scan() (*types.ClusterScanReport, error) {
 	pods, err := cs.client.ListPods(v1.NamespaceAll)
 	if err != nil {
 		return nil, fmt.Errorf("Failed to list pods - %v", err)
 	}
 
-	regsConfig := map[string]*api.RegistryConfig{}
+	regsConfig := map[string]*types.RegistryConfig{}
 	for i, r := range cs.RegistriesConfig.Registries {
 		regsConfig[r.Repository] = &cs.RegistriesConfig.Registries[i]
 	}
 
 	klog.V(7).Infof("ClusterScanner\n%v", pretty.Sprint(cs))
-	report := api.NewClusterScanReport()
+	report := types.NewClusterScanReport()
 	report.Policy = *cs.Policy
 
 	errs := []error{}
@@ -189,7 +189,7 @@ func (cs *ClusterScanner) generateAdvisorReport(res *ScanTaskResult) (*advisor.A
 		missingImageInfo = sets.NewString()
 		failedImages = sets.NewString()
 
-		podSummary := api.NewSeveritySummary()
+		podSummary := types.NewSeveritySummary()
 
 		podContainers := [][]v1.ContainerStatus{
 			pod.Status.InitContainerStatuses,

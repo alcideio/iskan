@@ -5,8 +5,8 @@ import (
 	"github.com/alcideio/iskan/pkg/report"
 	"os"
 
-	"github.com/alcideio/iskan/api"
 	"github.com/alcideio/iskan/pkg/scan"
+	"github.com/alcideio/iskan/types"
 	"github.com/spf13/cobra"
 )
 
@@ -14,8 +14,8 @@ func NewCommandScanImage() *cobra.Command {
 	image := ""
 	format := "json"
 	vulAPIConfig := ""
-	reportFilter := *(api.NewDefaultPolicy().ReportFilter)
-	policy := api.NewDefaultPolicy()
+	reportFilter := *(types.NewDefaultPolicy().ReportFilter)
+	policy := types.NewDefaultPolicy()
 
 	cmd := &cobra.Command{
 		Use:     "image",
@@ -27,12 +27,12 @@ func NewCommandScanImage() *cobra.Command {
 				return cmd.Usage()
 			}
 
-			config, err := api.LoadRegistriesConfig(vulAPIConfig)
+			config, err := types.LoadRegistriesConfig(vulAPIConfig)
 			if err != nil {
 				return err
 			}
 
-			regsConfig := map[string]*api.RegistryConfig{}
+			regsConfig := map[string]*types.RegistryConfig{}
 			for i, r := range config.Registries {
 				regsConfig[r.Repository] = &config.Registries[i]
 			}
