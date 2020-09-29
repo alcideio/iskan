@@ -1,0 +1,6 @@
+registries:
+  - kind: "gcr"
+    repository: "gcr.io/dcvisor-162009/alcide"
+    creds:
+      gcr: |
+        YOUR SERVICE ACCOUNT FILE CONTENT

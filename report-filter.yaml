@@ -1,0 +1,9 @@
+cvssGreaterThan: 0
+fixableOnly: false
+severities: "CRITICAL,HIGH,MEDIUM"
+vulnerabilityExclusions:
+  - CVE: CVE-2020-666666
+    Reason: Number of the beast
+    SnoozedBy: Devil
+    SnoozeUntil: 1
+
