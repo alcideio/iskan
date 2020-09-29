@@ -51,6 +51,13 @@ type ImageScanResult struct {
 	ExcludeCount uint32
 }
 
+type ScanTaskResult struct {
+	Findings map[string]*ImageScanResult
+
+	ScannedPods []*v1.Pod
+	SkippedPods []*v1.Pod
+}
+
 type ClusterScanReport struct {
 	//A Cluster UUID Identifier ... (namespace uid of kube-system ;P)
 	ClusterId string

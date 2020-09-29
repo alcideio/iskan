@@ -2,6 +2,8 @@ package util
 
 import (
 	"fmt"
+	"strings"
+
 	//  Import the crypto sha256 algorithm for the docker image parser to work
 	_ "crypto/sha256"
 	//  Import the crypto/sha512 algorithm for the docker image parser to work with 384 and 512 sha hashes
@@ -39,4 +41,16 @@ func ParseImageName(image string) (string, string, string, error) {
 		tag = DefaultImageTag
 	}
 	return repoToPull, tag, digest, nil
+}
+
+func GetImageId(image string, imageId string) string {
+	if strings.HasPrefix(imageId, "docker-pullable://") {
+		img := strings.TrimPrefix(imageId, "docker-pullable://")
+		named, _ := dockerref.ParseNormalizedNamed(img)
+
+		return named.String()
+
+	} else {
+		return fmt.Sprintf("%v@%v", image, imageId)
+	}
 }

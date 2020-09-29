@@ -36,29 +36,7 @@ Download the latest from the [release](https://github.com/alcideio/iskan/release
 ```shell script
 curl https://raw.githubusercontent.com/alcideio/iskan/master/download.sh | bash
 ```
-
-# iskan
-
-A collection of Kubernetes RBAC tools to sugar coat Kubernetes RBAC complexity
-
-```shell script
-Usage:
-  iskan [command]
-
-Available Commands:
-  auditgen        Generate from Kubernetes audit events, RBAC policy
-  bash-completion Generate bash completion. source < (advisor bash-completion)
-  generate        Generate Role or ClusterRole and reduce the use of wildcards
-  help            Help about any command
-  lookup          RBAC Lookup by subject (user/group/serviceaccount) name
-  policy-rules    RBAC List Policy Rules For subject (user/group/serviceaccount) name
-  version         Print iskan version
-  visualize       A RBAC visualizer
-
-Flags:
-  -h, --help      help for iskan
-  -v, --v Level   number for the log level verbosity
-```
+# Usage
 
 - [The `iskan cluster` command](#scan-cluster)
 - [The `iskan image` command](#scan-image)
@@ -150,13 +128,13 @@ Flags:
 If you think you have found a bug please follow the instructions below.
 
 - Please spend a small amount of time giving due diligence to the issue tracker. Your issue might be a duplicate.
-- Open a [new issue](https://github.com/alcideio/iskan/issues/new) if a duplicate doesn't already exist.
+- Open a [new issue](https://github.com/alcideio/iskan/issues/new/choose) if a duplicate doesn't already exist.
 
 ### Features
 
 If you have an idea to enhance iskan follow the steps below.
 
-- Open a [new issue](https://github.com/alcideio/iskan/issues/new).
+- Open a [new issue](https://github.com/alcideio/iskan/issues/new/choose).
 - Remember users might be searching for your issue in the future, so please give it a meaningful title to helps others.
 - Clearly define the use case, using concrete examples.
 - Feel free to include any technical design for your feature.

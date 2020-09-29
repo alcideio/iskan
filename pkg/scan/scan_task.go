@@ -1,14 +1,12 @@
 package scan
 
 import (
-	"fmt"
 	"strings"
 	"sync"
 
 	"github.com/alcideio/iskan/pkg/registry"
 	"github.com/alcideio/iskan/pkg/util"
 	"github.com/alcideio/iskan/types"
-	dockerref "github.com/docker/distribution/reference"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/util/errors"
 	"k8s.io/apimachinery/pkg/util/sets"
@@ -44,15 +42,8 @@ func RegistryConfigForImage(image string, registriesConfig map[string]*types.Reg
 	}
 }
 
-type ScanTaskResult struct {
-	Findings map[string]*types.ImageScanResult
-
-	ScannedPods []*v1.Pod
-	SkippedPods []*v1.Pod
-}
-
-func ScanTask(pods []v1.Pod, policy *types.Policy, registriesConfig map[string]*types.RegistryConfig) (*ScanTaskResult, error) {
-	scanTaskREsult := &ScanTaskResult{
+func ScanTask(pods []v1.Pod, policy *types.Policy, registriesConfig map[string]*types.RegistryConfig) (*types.ScanTaskResult, error) {
+	scanTaskREsult := &types.ScanTaskResult{
 		Findings:    nil,
 		ScannedPods: []*v1.Pod{},
 		SkippedPods: []*v1.Pod{},
@@ -91,7 +82,7 @@ func ScanTask(pods []v1.Pod, policy *types.Policy, registriesConfig map[string]*
 					continue
 				}
 				analyze = true
-				containers.Insert(getImageId(c.Image, c.ImageID))
+				containers.Insert(util.GetImageId(c.Image, c.ImageID))
 			}
 		}
 
@@ -132,16 +123,4 @@ func ScanTask(pods []v1.Pod, policy *types.Policy, registriesConfig map[string]*
 	scanTaskREsult.Findings = results
 
 	return scanTaskREsult, errors.NewAggregate(errs)
-}
-
-func getImageId(image string, imageId string) string {
-	if strings.HasPrefix(imageId, "docker-pullable://") {
-		img := strings.TrimPrefix(imageId, "docker-pullable://")
-		named, _ := dockerref.ParseNormalizedNamed(img)
-
-		return named.String()
-
-	} else {
-		return fmt.Sprintf("%v@%v", image, imageId)
-	}
 }
