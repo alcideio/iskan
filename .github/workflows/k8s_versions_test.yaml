@@ -15,11 +15,11 @@ jobs:
         # https://github.com/kubernetes-sigs/kind/releases
         config:
           - kubever: v1.13.12
-#          - kubever: v1.14.10
-#          - kubever: v1.15.12
-#          - kubever: v1.16.15
-#          - kubever: v1.17.11
-#          - kubever: v1.18.8
+          - kubever: v1.14.10
+          - kubever: v1.15.12
+          - kubever: v1.16.15
+          - kubever: v1.17.11
+          - kubever: v1.18.8
           - kubever: v1.19.1
 
     steps:
