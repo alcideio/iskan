@@ -50,6 +50,10 @@ func LoadRegistriesConfigFromBuffer(data []byte) (*RegistriesConfig, error) {
 		Registries: []RegistryConfig{},
 	}
 
+	if len(data) == 0 {
+		return rc, nil
+	}
+
 	err := yaml.Unmarshal(data, rc)
 	if err != nil {
 		return nil, err

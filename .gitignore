@@ -18,7 +18,7 @@ vendor/
 bin/
 dist/
 
-coverage.*
+*coverage.*
 
 config-example.yaml
 report-filter.yaml

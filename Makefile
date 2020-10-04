@@ -89,9 +89,14 @@ test: ##@test run tests
 
 .PHONY: e2e
 e2e: ##@test run tests
+	# For local test runs you need to set E2E_GCR_PULLSECRET and E2E_API_CONFIG - see e2e/framework/config.go
 	go test -v github.com/alcideio/iskan/e2e  -c -o bin/e2e.test
-	bin/e2e.test  -ginkgo.v -iskan.api-config=config-example.yaml
-	#cd e2e && export CGO_ENABLED=0 && go build -o $(BINDIR)/e2e -tags staticbinary -v github.com/alcideio/iskan/e2e
+	bin/e2e.test  -ginkgo.v
+
+e2e-coverage: ##@test run tests
+	go test -v -race -covermode atomic -coverprofile=e2e-coverage.out github.com/alcideio/iskan/e2e
+	go tool cover -func=e2e-coverage.out
+	go tool cover -html=e2e-coverage.out -o e2e-coverage.html
 
 .PHONY: coverage
 coverage: ##@test run tests with coverage report

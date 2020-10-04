@@ -20,6 +20,18 @@ var GlobalConfig Config = Config{
 
 var gcrPullsecret = ""
 
+// How to export your config file for local testing
+/*
+read -r -d '' E2E_API_CONFIG << EOM
+registries:
+  - kind: "gcr"
+    repository: "gcr.io/dcvisor-162009"
+    creds:
+      gcr: |
+		SERVICE ACCOUNT FILE HERE
+EOM
+*/
+
 func RegisterFrameworkFlags() {
 	flag.StringVar(&gcrPullsecret, "iskan.gcr-pull-secret", os.Getenv("E2E_GCR_PULLSECRET"), "The pull secret one would place in a Kubernetes Secret Object. Use E2E_GCR_PULLSECRET")
 	flag.StringVar(&GlobalConfig.ApiConfigFile, "iskan.api-config", os.Getenv("E2E_API_CONFIG"), "The Vulnerability API configuration - use E2E_API_CONFIG")

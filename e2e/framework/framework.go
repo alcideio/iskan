@@ -101,7 +101,7 @@ func (f *Framework) NewClusterScanner(policy *types.Policy) *scan.ClusterScanner
 	if policy == nil {
 		policy = types.NewDefaultPolicy()
 	}
-	Logf("Loading Api  Configuration from '%v'", GlobalConfig.ApiConfigFile)
+
 	config, err := types.LoadRegistriesConfigFromBuffer([]byte(GlobalConfig.ApiConfigFile))
 	ExpectNoError(err)
 
