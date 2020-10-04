@@ -40,6 +40,9 @@ jobs:
           kubectl get storageclass standard
 
       - name: E2E
+        env:
+          E2E_GCR_PULLSECRET: ${{ secrets.E2E_GCR_PULLSECRET }}
+          E2E_API_CONFIG: ${{ secrets.E2E_API_CONFIG }}
         run: |
           make e2e
 
