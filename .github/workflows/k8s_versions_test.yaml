@@ -34,7 +34,7 @@ jobs:
           node_image: kindest/node:${{ matrix.config.kubever }}
           wait: 5m
 
-      - name: Test
+      - name: Check Cluster
         run: |
           kubectl cluster-info
           kubectl get storageclass standard

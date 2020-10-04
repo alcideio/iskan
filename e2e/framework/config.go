@@ -28,7 +28,11 @@ registries:
     repository: "gcr.io/dcvisor-162009"
     creds:
       gcr: |
-		SERVICE ACCOUNT FILE HERE
+		YOUR SERVICE ACCOUNT
+EOM
+
+read -r -d '' E2E_GCR_PULLSECRET << EOM
+GCR PULL IMAGE SERVICE ACCOUNT
 EOM
 */
 
