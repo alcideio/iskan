@@ -51,6 +51,6 @@ func GetImageId(image string, imageId string) string {
 		return named.String()
 
 	} else {
-		return fmt.Sprintf("%v@%v", image, imageId)
+		return fmt.Sprintf("%v", imageId)
 	}
 }

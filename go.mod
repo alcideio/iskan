@@ -13,16 +13,19 @@ require (
 	github.com/imdario/mergo v0.3.11 // indirect
 	github.com/kylelemons/godebug v1.1.0
 	github.com/olekukonko/tablewriter v0.0.4
+	github.com/onsi/ginkgo v1.11.0
+	github.com/onsi/gomega v1.7.0
 	github.com/opencontainers/go-digest v1.0.0 // indirect
 	github.com/spf13/cobra v1.0.0
 	github.com/spf13/pflag v1.0.5
+	github.com/spf13/viper v1.4.0
 	github.com/stretchr/testify v1.5.1
 	google.golang.org/api v0.31.0
 	google.golang.org/genproto v0.0.0-20200831141814-d751682dd103
 	k8s.io/api v0.17.11
 	k8s.io/apimachinery v0.17.11
 	k8s.io/client-go v0.17.11
+	k8s.io/component-base v0.17.11
 	k8s.io/klog v1.0.0
-	k8s.io/utils v0.0.0-20200729134348-d5654de09c73 // indirect
-	sigs.k8s.io/yaml v1.1.0
+	sigs.k8s.io/yaml v1.2.0
 )

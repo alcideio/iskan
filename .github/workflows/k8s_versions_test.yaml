@@ -15,11 +15,11 @@ jobs:
         # https://github.com/kubernetes-sigs/kind/releases
         config:
           - kubever: v1.13.12
-          - kubever: v1.14.10
-          - kubever: v1.15.12
-          - kubever: v1.16.15
-          - kubever: v1.17.11
-          - kubever: v1.18.8
+#          - kubever: v1.14.10
+#          - kubever: v1.15.12
+#          - kubever: v1.16.15
+#          - kubever: v1.17.11
+#          - kubever: v1.18.8
           - kubever: v1.19.1
 
     steps:
@@ -42,9 +42,10 @@ jobs:
       - name: Build iSKan
         run: |
           make build
-          ./bin/iskan cluster  -f json -o 'iskan-${{ matrix.config.kubever }}.json'
+          echo "running a scan and saving the report" && ./bin/iskan cluster  -f json -o report.json
+          cp report.json iskan-${{ matrix.config.kubever }}.json
 
-      - name: Upload Alcide Advisor Scan Report
+      - name: Upload iSKan Report
         uses: actions/upload-artifact@v1
         with:
           name: 'iskan-${{ matrix.config.kubever }}.json'

@@ -48,6 +48,9 @@ ifdef VERSION
 	BINARY_VERSION = $(VERSION)
 endif
 
+#
+# BUILD TOOL CHAIN
+#
 
 ## Only set Version if building a tag or VERSION is set
 ifneq ($(BINARY_VERSION),)
@@ -68,14 +71,27 @@ get-release-bins: ##@build Download goreleaser
 	tar xvf goreleaser_Linux_x86_64.tar.gz &&\
 	rm -Rf goreleaser_Linux_x86_64*
 
+#
+# BUILD
+#
 
 .PHONY: build
 build: ##@build Build on local platform
 	export CGO_ENABLED=0 && go build -o $(BINDIR)/$(BINNAME) -tags staticbinary -v -ldflags '$(LDFLAGS)'  github.com/alcideio/iskan
 
+#
+# Test & E2E
+#
+
 .PHONY: test
 test: ##@test run tests
 	go test -v github.com/alcideio/iskan/...
+
+.PHONY: e2e
+e2e: ##@test run tests
+	go test -v github.com/alcideio/iskan/e2e  -c -o bin/e2e.test
+	bin/e2e.test  -ginkgo.v -iskan.api-config=config-example.yaml
+	#cd e2e && export CGO_ENABLED=0 && go build -o $(BINDIR)/e2e -tags staticbinary -v github.com/alcideio/iskan/e2e
 
 .PHONY: coverage
 coverage: ##@test run tests with coverage report
@@ -83,11 +99,20 @@ coverage: ##@test run tests with coverage report
 	go tool cover -func=coverage.out
 	go tool cover -html=coverage.out -o coverage.html
 
+REGISTRY ?= gcr.io/dcvisor-162009/iskan/e2e
+e2e-build-images: ##@e2e build test images
+	for dir in $(wildcard e2e/images/*); do \
+        image=`basename $$dir` ; cd $$dir ; docker build -t $(REGISTRY)/$$image . ; docker push $(REGISTRY)/$$image ; cd -;\
+    done
+
 create-kind-cluster:  ##@Test creatte KIND cluster
 	kind create cluster --image kindest/node:v1.18.2 --name iskan
 
 delete-kind-cluster:  ##@Test delete KIND cluster
 	kind delete cluster --name iskan
+#
+# RELEASE
+#
 
 #
 #  How to release:

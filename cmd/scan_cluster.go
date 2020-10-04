@@ -65,17 +65,17 @@ func NewCommandScanCluster() *cobra.Command {
 			util.ConsolePrinter(fmt.Sprintf("Cluster UID '%v'", color.HiBlueString(scanReport.ClusterId)))
 
 			if scanReport.Policy.ScanScope.NamespaceInclude != "" {
-				util.ConsolePrinter(fmt.Sprintf("Including Namespaces '%v'", color.HiGreenString(scanReport.Policy.ScanScope.NamespaceInclude)))
+				util.ConsolePrinter(fmt.Sprintf("Scan Scope ==> Including Namespaces '%v'", color.HiGreenString(scanReport.Policy.ScanScope.NamespaceInclude)))
 			}
 
 			if scanReport.Policy.ScanScope.NamespaceExclude != "" {
-				util.ConsolePrinter(fmt.Sprintf("Excluding Namespaces '%v'", color.HiRedString(scanReport.Policy.ScanScope.NamespaceExclude)))
+				util.ConsolePrinter(fmt.Sprintf("Scan Scope ==> Excluding Namespaces '%v'", color.HiRedString(scanReport.Policy.ScanScope.NamespaceExclude)))
 			}
 
 			if len(scanReport.Policy.ScanScope.RegistryExclusion) > 0 {
 				//FIXME - SNOOZE
 				for _, e := range scanReport.Policy.ScanScope.RegistryExclusion {
-					util.ConsolePrinter(fmt.Sprintf("Excluding Registry '%v'", color.HiRedString(e.Registry)))
+					util.ConsolePrinter(fmt.Sprintf("Scan Scope ==> Excluding Registry '%v'", color.HiRedString(e.Registry)))
 				}
 			}
 

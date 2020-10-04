@@ -44,3 +44,16 @@ func LoadRegistriesConfig(fname string) (*RegistriesConfig, error) {
 
 	return rc, err
 }
+
+func LoadRegistriesConfigFromBuffer(data []byte) (*RegistriesConfig, error) {
+	rc := &RegistriesConfig{
+		Registries: []RegistryConfig{},
+	}
+
+	err := yaml.Unmarshal(data, rc)
+	if err != nil {
+		return nil, err
+	}
+
+	return rc, err
+}
