@@ -1,0 +1,8 @@
+cvssGreaterThan: 0
+fixableOnly: false
+#severities: "CRITICAL,HIGH,MEDIUM"
+#      vulnerabilityExclusions:
+#        - CVE: CVE-2020-xxxxxxx
+#          Reason: Too
+#          SnoozedBy: SomeUser
+#          SnoozeUntil: 0

@@ -1,0 +1,41 @@
+image:
+  iskan: alcide/iskan:localscan # or alcide/iskan:latest
+  pullPolicy: IfNotPresent
+
+#  string	   meaning
+#  ------	   -------
+#  @yearly	   Run once a year, "0 0 1 1 *".
+#  @annually	 (same as @yearly)
+#  @monthly	   Run once a month, "0	0 1 * *".
+#  @weekly	   Run once a week, "0 0 * * 0".
+#  @daily	     Run once a day, "0 0	* * *".
+#  @midnight	 (same as @daily)
+#  @hourly	   Run once an hour, "0	* * * *".
+#  @every_minute   Run once a minute, "*/1 * * * *".
+#  @every_second   Run once a second.
+cronSchedule: "*/1 * * * *"
+
+# The vulnerability credentials configurations
+vulnProviderCredFile: config/providers.yaml
+
+# The Report Policy configuration
+reportPolicyFile: config/report-policy.yaml
+
+# Export generated report to one or more export targets
+exports:
+  # Export report to Slack
+  slack:
+    # -- The destination slack channel
+    channel: |-
+        @someuser
+    # -- Slack OAuth Token - https://api.slack.com/apps/ - should have the form: xoxb-12345678901-123456789012-somerandomstuff
+    token: ""
+
+  # Export report to S3 Bucket
+  s3:
+    # -- Format: s3://mybucket/subdir?region=us-west-2
+    s3Url: "s3://mybucket/subdir?region=us-west-2"
+    # -- S3 AWS Access Key Id
+    awsAccessKeyId:
+    # -- S3 AWS Secret Key
+    awsSecretKey:

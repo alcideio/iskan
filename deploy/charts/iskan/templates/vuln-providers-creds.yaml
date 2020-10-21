@@ -1,0 +1,10 @@
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ template "alcide-iskan.fullname" . }}-creds
+  namespace: {{ .Release.Namespace }}
+type: Opaque
+data:
+  providers.yaml: {{ .Files.Get .Values.vulnProviderCredFile  | b64enc | quote  -}}
+

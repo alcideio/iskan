@@ -1,0 +1,76 @@
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: {{ template "alcide-iskan.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+{{ include "alcide-iskan.labels" . | indent 4 }}
+spec:
+  schedule: {{ .Values.cronSchedule | quote }}
+  # Keep the last run 
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1  
+  # Concurrency is not required
+  concurrencyPolicy: Forbid
+
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          annotations:
+            alcide.io/iskan: "cronjob"
+        spec:
+          serviceAccountName: {{ template "alcide-iskan.fullname" . }}
+          volumes:
+            - name: outbox
+              emptyDir: {}
+            - name: workspace
+              emptyDir: {}
+            - name: report-config
+              configMap:
+                defaultMode: 420
+                items:
+                  - key: report-config.yaml
+                    path: report-config.yaml
+                name: report-config
+            - name: vuln-providers-creds
+              secret:
+                defaultMode: 420
+                items:
+                  - key: providers.yaml
+                    path: providers.yaml
+                secretName: {{ template "alcide-iskan.fullname" . }}-creds
+
+          containers:
+          - name: iskan
+            image: {{ .Values.image.iskan }}
+            imagePullPolicy: {{ .Values.image.pullPolicy }}
+            volumeMounts:            
+                - mountPath: /config
+                  name: report-config
+                - mountPath: /creds
+                  name: vuln-providers-creds
+                # Our Send Box
+                - mountPath: /outbox
+                  name: outbox
+                - mountPath: /workspace
+                  name: workspace
+            args:
+              - cluster
+              #- --namespace-include=alcide
+              #- --namespace-exclude=alcide
+              - --format=json
+              - --outfile=/outbox/report.json
+              - --api-config=/creds/providers.yaml
+              - --report-config=/config/report-config.yaml
+              #- -v=7 # Verbose level 10 will print secrets - DO NOT USE THAT
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                - ALL
+              runAsNonRoot: true
+              runAsUser: 10001
+              readOnlyRootFilesystem: false
+          restartPolicy: OnFailure

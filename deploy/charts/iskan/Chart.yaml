@@ -1,0 +1,27 @@
+apiVersion: v2
+name: iskan
+description: |
+  # Kubernetes Native Image Scanning.
+
+  Harness your existing Container Image Vulnerability Scanning information to your Kubernetes Cluster.
+  **iskan** enables you:
+  - [x] Plug one or more container image vulnerability providers such as ECR, GCR, Azure and others
+  - [x] Analyse the running Pods and their containers for known vulnerabilities
+  - [x] Control the scan scope to certain namespace
+  - [x] Filter scan results by: Severity, CVSS Score, Fixable CVEs, and even snooze specific CVEs.
+
+keywords:
+  - security
+  - vulnerability scan
+  - guardrails
+  - image scan
+type: application
+version: 1.0.0
+appVersion: 1.0.0
+home: https://www.alcide.io
+icon: https://www.alcide.io/wp-content/uploads/2020/01/advisor@3x.png
+sources:
+- https://github.com/alcideio/iskan
+maintainers:
+- email: gadi@alcide.io
+  name: Gadi Naor

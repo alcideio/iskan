@@ -1,0 +1,76 @@
+name: Test Matrix Alcide iSKan
+
+on: [workflow_dispatch]
+
+jobs:
+  scan-tests:
+    name: Alcide iSKan on Kubernetes ${{ matrix.config.kubever }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # https://github.com/kubernetes-sigs/kind/releases
+        config:
+          - kubever: v1.13.12
+#          - kubever: v1.14.10
+#          - kubever: v1.15.12
+#          - kubever: v1.16.15
+#          - kubever: v1.17.11
+#          - kubever: v1.18.8
+#          - kubever: v1.19.1
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: Launch Cluster
+        uses: helm/kind-action@v1.0.0
+        with:
+          version: v0.9.0
+          cluster_name: iskan
+          node_image: kindest/node:${{ matrix.config.kubever }}
+          wait: 5m
+
+      - name: Check Cluster
+        run: |
+          kubectl cluster-info
+          kubectl get storageclass standard
+
+      - name: E2E
+        env:
+          E2E_PIPELINE: ${{ secrets.E2E_PIPELINE }}
+          E2E_GCR_PULLSECRET: ${{ secrets.E2E_GCR_PULLSECRET }}
+          E2E_API_CONFIG: ${{ secrets.E2E_API_CONFIG }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+          AZURE_ACR_SP_USER: ${{ secrets.AZURE_ACR_SP_USER }}
+          AZURE_ACR_SP_PASS: ${{ secrets.AZURE_ACR_SP_PASS }}
+        run: |
+          make e2e
+
+      - name: Build iSKan
+        run: |
+          make build
+          echo "running a scan and saving the report" && ./bin/iskan cluster  -f json -o report.json
+          cp report.json iskan-${{ matrix.config.kubever }}.json
+
+      - name: Upload iSKan Report
+        uses: actions/upload-artifact@v1
+        with:
+          name: 'iskan-${{ matrix.config.kubever }}.json'
+          path: 'iskan-${{ matrix.config.kubever }}.json'
+
+      - name: Scan Local Cluster
+        uses: alcideio/advisor-action@v1.1.0
+        with:
+          exclude_namespaces: '-'
+          include_namespaces: '*'
+          output_file: 'advisor-scan-${{ matrix.config.kubever }}.html'
+
+      - name: Upload Alcide Advisor Scan Report
+        uses: actions/upload-artifact@v1
+        with:
+          name: 'advisor-scan-${{ matrix.config.kubever }}.html'
+          path: 'advisor-scan-${{ matrix.config.kubever }}.html'
+

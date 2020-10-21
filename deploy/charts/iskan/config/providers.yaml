@@ -1,0 +1,42 @@
+providers:
+  - kind: ecr
+    repository: 666666.dkr.ecr.us-west-2.amazonaws.com/iskan
+    creds:
+      ecr:
+        accesskeyid: mykeyid
+        secretaccesskey: mysecretkey
+        region: us-west-2
+  - kind: acr
+    repository: myrepo.azurecr.io/iskan
+    creds:
+      acr:
+        tenantid: my-tenant-uuid
+        subscriptionid: my-subscription-uuid
+        clientid: client-id
+        clientsecret: client-secret
+        cloudname: AZUREPUBLICCLOUD
+  - kind: gcr
+    repository: gcr.io/myproj
+    creds:
+      gcr: |
+        {
+          "type": "service_account",
+          "project_id": "myproj",
+          "private_key_id": "someprivatekey",
+          "private_key": "-----BEGIN PRIVATE KEY-----\n\n-----END PRIVATE KEY-----\n",
+          "client_email": "imagevulreader@someprivatekey.iam.gserviceaccount.com",
+          "client_id": "someclientid",
+          "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+          "token_uri": "https://oauth2.googleapis.com/token",
+          "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+          "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/imagevulreader%40myproj.iam.gserviceaccount.com"
+        }
+  - kind: trivy
+    repository: '*'
+    creds:
+      trivy:
+        cacheDir: "/workspace"
+        reportsDir: "/workspace"
+        debugmode: false
+        skipupdate: false
+        insecure: false
