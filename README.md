@@ -162,7 +162,7 @@ Global Flags:
   -v, --v Level   number for the log level verbosity
 ```
 
-## Release Milestones
+## Milestones
 <details>
 <summary>Click To See List</summary>
   
@@ -171,10 +171,11 @@ Global Flags:
 - [x] E2E
 - [x] Binary Release 
 - [x] Scope & Exception Configuration
-- [x] Docker Image
-- [ ] Helm Install
+- [x] Docker Images
+- [x] Helm Install
 - [x] Public image scan support using inline scan engine
-- [ ] HTML report viewer
+- [ ] Report export to 3rd party integrations (Slack, Webhook, ...)
+- [ ] Report formats (table, json, yaml, html)
 - [ ] Examples & Documentation
   
 </details>
