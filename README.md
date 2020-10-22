@@ -177,6 +177,8 @@ Global Flags:
 - [ ] Report export to 3rd party integrations (Slack, Webhook, ...)
 - [ ] Report formats (table, json, yaml, html)
 - [ ] Examples & Documentation
+- [ ] Running in watch mode
+- [ ] kubectl plugin
   
 </details>
 
