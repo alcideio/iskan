@@ -150,8 +150,8 @@ func NewCommandScanCluster() *cobra.Command {
 	flags := cmd.Flags()
 
 	flags.StringVar(&clusterContext, "cluster-context", "", "Cluster Context .use 'kubectl config get-contexts' to list available contexts")
-	flags.StringVarP(&format, "format", "f", "json", "Output format. Supported formats: json | yaml | table")
-	flags.StringVarP(&outfile, "outfile", "o", "iskan", "Output file name. Use '-' to output to stdout")
+	flags.StringVarP(&format, "format", "f", "json", "Output format. Supported formats: json | yaml")
+	flags.StringVarP(&outfile, "outfile", "o", "alcide-iskan.report", "Output file name. Use '-' to output to stdout")
 	flags.StringVarP(&vulAPIConfig, "api-config", "c", "", "The Vulnerability API configuration file name")
 	flags.StringVarP(&reportConfig, "report-config", "r", "", "The Report configuration file name")
 

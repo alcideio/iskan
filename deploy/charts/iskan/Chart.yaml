@@ -15,8 +15,9 @@ keywords:
   - vulnerability scan
   - guardrails
   - image scan
+  - kubernetes runtime
 type: application
-version: 1.0.0
+version: 1.1.0
 appVersion: 1.0.0
 home: https://www.alcide.io
 icon: https://www.alcide.io/wp-content/uploads/2020/01/advisor@3x.png

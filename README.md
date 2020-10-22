@@ -172,13 +172,14 @@ Global Flags:
 - [x] Binary Release 
 - [x] Scope & Exception Configuration
 - [x] Docker Images
-- [x] Helm Install
+- [x] Cluster Scan CronJob (Helm Install)
 - [x] Public image scan support using inline scan engine
-- [ ] Report export to 3rd party integrations (Slack, Webhook, ...)
-- [ ] Report formats (table, json, yaml, html)
+- [x] Report export to 3rd party integrations (Slack, Webhook, ...)
+- [ ] Report formats (json, yaml)
+- [ ] Fancy html report
 - [ ] Examples & Documentation
 - [ ] Running in watch mode
-- [ ] kubectl plugin
+- [ ] kubectl iskan plugin
   
 </details>
 

@@ -28,12 +28,8 @@ Harness your existing Container Image Vulnerability Scanning information to your
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | cronSchedule | string | `"*/1 * * * *"` |  |
-| exports.s3.awsAccessKeyId | string | `nil` | S3 AWS Access Key Id |
-| exports.s3.awsSecretKey | string | `nil` | S3 AWS Secret Key |
-| exports.s3.s3Url | string | `"s3://mybucket/subdir?region=us-west-2"` | Format: s3://mybucket/subdir?region=us-west-2 |
-| exports.slack.channel | string | `"@someuser"` | The destination slack channel |
-| exports.slack.token | string | `""` | Slack OAuth Token - https://api.slack.com/apps/ - should have the form: xoxb-12345678901-123456789012-somerandomstuff |
-| image.iskan | string | `"alcide/iskan:latest"` |  |
+| export.targets | list | `["file:///path/to/dir","slack://mychannel?apikey=<mykey>[&file-type=json&title=mymsgtitle]","webhook://myserver?x-headers=X-myheader:myval&token-bearer=1234"]` | Export generated report to one or more export targets  see: https://github.com/kruzio/exodus#supported-targets |
+| image.iskan | string | `"alcide/iskan:localscan"` |  |
 | image.pullPolicy | string | `"IfNotPresent"` |  |
 | reportPolicyFile | string | `"config/report-policy.yaml"` |  |
 | vulnProviderCredFile | string | `"config/providers.yaml"` |  |

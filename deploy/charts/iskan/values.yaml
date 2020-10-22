@@ -21,21 +21,11 @@ vulnProviderCredFile: config/providers.yaml
 # The Report Policy configuration
 reportPolicyFile: config/report-policy.yaml
 
-# Export generated report to one or more export targets
-exports:
-  # Export report to Slack
-  slack:
-    # -- The destination slack channel
-    channel: |-
-        @someuser
-    # -- Slack OAuth Token - https://api.slack.com/apps/ - should have the form: xoxb-12345678901-123456789012-somerandomstuff
-    token: ""
+export:
+  # -- Export generated report to one or more export targets
+  #  see: https://github.com/kruzio/exodus#supported-targets
+  targets:
+  - file:///path/to/dir
+  - slack://mychannel?apikey=<mykey>[&file-type=json&title=MyClusterVulnReport
+  - webhook://myserver?x-headers=X-myheader:myval&token-bearer=1234
 
-  # Export report to S3 Bucket
-  s3:
-    # -- Format: s3://mybucket/subdir?region=us-west-2
-    s3Url: "s3://mybucket/subdir?region=us-west-2"
-    # -- S3 AWS Access Key Id
-    awsAccessKeyId:
-    # -- S3 AWS Secret Key
-    awsSecretKey:

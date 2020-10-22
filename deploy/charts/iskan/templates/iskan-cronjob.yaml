@@ -43,6 +43,34 @@ spec:
                 secretName: {{ template "alcide-iskan.fullname" . }}-creds
 
           containers:
+          - name: exodus
+            image: kruzio/exodus:latest
+            imagePullPolicy: IfNotPresent
+            volumeMounts:
+              - mountPath: /outbox
+                name: outbox
+            args:
+              - "sendfile"
+              - "--watch"
+              - "/outbox"
+              - "--watch-forever"
+              - "false"
+              # Debugging
+              #- "-v"
+              #- "7"
+
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - ALL
+            env:
+              - name: KRUZIO_EXODUS_SENDFILE_TARGETS
+                valueFrom:
+                  secretKeyRef:
+                    name: {{ template "alcide-iskan.fullname" . }}-creds
+                    key: targets
           - name: iskan
             image: {{ .Values.image.iskan }}
             imagePullPolicy: {{ .Values.image.pullPolicy }}
