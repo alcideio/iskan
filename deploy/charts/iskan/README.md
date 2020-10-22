@@ -1,6 +1,6 @@
 # iskan
 
-![Version: 1.0.0](https://img.shields.io/badge/Version-1.0.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.0.0](https://img.shields.io/badge/AppVersion-1.0.0-informational?style=flat-square)
+![Version: 1.1.0](https://img.shields.io/badge/Version-1.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.0.0](https://img.shields.io/badge/AppVersion-1.0.0-informational?style=flat-square)
 
 # Kubernetes Native Image Scanning.
 
@@ -28,10 +28,15 @@ Harness your existing Container Image Vulnerability Scanning information to your
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | cronSchedule | string | `"*/1 * * * *"` |  |
-| export.targets | list | `["file:///path/to/dir","slack://mychannel?apikey=<mykey>[&file-type=json&title=mymsgtitle]","webhook://myserver?x-headers=X-myheader:myval&token-bearer=1234"]` | Export generated report to one or more export targets  see: https://github.com/kruzio/exodus#supported-targets |
+| export.targets | list | `["file:///path/to/dir","slack://mychannel?apikey=<mykey>[&file-type=json&title=MyClusterVulnReport","webhook://myserver?x-headers=X-myheader:myval&token-bearer=1234"]` | Export generated report to one or more export targets  see: https://github.com/kruzio/exodus#supported-targets |
 | image.iskan | string | `"alcide/iskan:localscan"` |  |
 | image.pullPolicy | string | `"IfNotPresent"` |  |
 | reportPolicyFile | string | `"config/report-policy.yaml"` |  |
+| runOptions.namespacesExcluded | string | `"kube-system"` | Comma separated list of namespaces to exclude from the scan or use '-' to avoid exclusion |
+| runOptions.namespacesIncluded | string | `"*"` | Comma separated list of namespaces to scan or use '*' for all of them |
+| runOptions.reportFormat | string | `"json"` | The report format - json or yaml |
+| runOptions.scanApiBurst | int | `100` | The Vulnerability Provider API call burst limit |
+| runOptions.scanApiQPS | int | `30` | The Vulnerability Provider API call rate limit (queries-per-sec) |
 | vulnProviderCredFile | string | `"config/providers.yaml"` |  |
 
 ----------------------------------------------

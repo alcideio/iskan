@@ -21,6 +21,18 @@ vulnProviderCredFile: config/providers.yaml
 # The Report Policy configuration
 reportPolicyFile: config/report-policy.yaml
 
+runOptions:
+  # -- Comma separated list of namespaces to scan or use '*' for all of them
+  namespacesIncluded: "*"
+  # -- Comma separated list of namespaces to exclude from the scan or use '-' to avoid exclusion
+  namespacesExcluded: "kube-system"
+  # -- The Vulnerability Provider API call rate limit (queries-per-sec)
+  scanApiQPS: 30
+  # -- The Vulnerability Provider API call burst limit
+  scanApiBurst: 100
+  # -- The report format - json or yaml
+  reportFormat: "json"
+
 export:
   # -- Export generated report to one or more export targets
   #  see: https://github.com/kruzio/exodus#supported-targets

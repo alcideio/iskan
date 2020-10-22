@@ -65,7 +65,7 @@ iskan --cluster-context mycluster --api-config myconfig.yaml
           --filter-cvss float32        Include CVEs with CVSS score greater or equal than the specified number. Valid values: 0.0-10.0
           --filter-fixable-only        Include CVEs with which are fixable
           --filter-severity string     Select which severities to include. Comma seperated MINIMAL,LOW,MEDIUM,HIGH,CRITICAL
-      -f, --format string              Output format. Supported formats: json | yaml | table (default "json")
+      -f, --format string              Output format. Supported formats: json | yaml | (default "json")
       -h, --help                       help for cluster
           --namespace-exclude string   Namespaces to exclude from the scan (default "kube-system")
           --namespace-include string   Namespaces to include in the scan (default "*")

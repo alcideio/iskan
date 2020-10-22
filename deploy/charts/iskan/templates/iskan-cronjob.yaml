@@ -86,10 +86,12 @@ spec:
                   name: workspace
             args:
               - cluster
-              #- --namespace-include=alcide
-              #- --namespace-exclude=alcide
-              - --format=json
-              - --outfile=/outbox/report.json
+              - --namespace-include={{ .Values.runOptions.namespacesIncluded | quote }}
+              - --namespace-exclude={{ .Values.runOptions.namespacesExcluded | quote }}
+              - --format={{ .Values.runOptions.reportFormat }}
+              - --scan-api-burst={{ .Values.runOptions.scanApiBurst}}
+              - --scan-api-qps={{ .Values.runOptions.scanApiQPS}}
+              - --outfile=/outbox/report
               - --api-config=/creds/providers.yaml
               - --report-config=/config/report-config.yaml
               #- -v=7 # Verbose level 10 will print secrets - DO NOT USE THAT
