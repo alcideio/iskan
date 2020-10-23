@@ -11,10 +11,10 @@
 
 
 Harness your existing Container Image Vulnerability Scanning information to your Kubernetes Cluster.
-**iskan** enables you:
+**iskan** enables you to:
 - [x] Plug one or more container image vulnerability providers such as ECR, GCR, Azure and others
-- [x] Analyse the running Pods and their containers for known vulnerabilities
-- [x] Control the scan scope to certain namespace
+- [x] Analyse the running Pods and their containers for known vulnerabilities.
+- [x] Control the scan scope to certain namespaces
 - [x] Filter scan results by: Severity, CVSS Score, Fixable CVEs, and even snooze specific CVEs.
 
 <details>
@@ -175,8 +175,8 @@ Global Flags:
 - [x] Cluster Scan CronJob (Helm Install)
 - [x] Public image scan support using inline scan engine
 - [x] Report export to 3rd party integrations (Slack, Webhook, ...)
-- [ ] Report formats (json, yaml)
-- [ ] Fancy html report
+- [x] Report formats (json, yaml)
+- [ ] Fancy HTML report
 - [ ] Examples & Documentation
 - [ ] Running in watch mode
 - [ ] kubectl iskan plugin
