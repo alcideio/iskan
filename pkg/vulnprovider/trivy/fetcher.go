@@ -84,7 +84,7 @@ func getImageScanFindings(scanner Trivy, containerImage string) ([]*grafeas.Occu
 	occurrences := make([]*grafeas.Occurrence, 0)
 
 	for _, v := range vulnOccurences {
-		o := newImageScanOccurrence(containerImage)
+		o := newImageScanOccurrence(containerImage, v.Vulnerability.ShortDescription)
 		o.Details = v
 		o.Kind = grafeas.NoteKind_VULNERABILITY
 		occurrences = append(occurrences, o)
@@ -107,7 +107,7 @@ func getFindings(findings ScanReport) ([]*grafeas.Occurrence_Vulnerability, erro
 				RelatedUrls:       getRelatedUrls(f.References),
 				FixAvailable:      (f.FixedVersion != ""),
 				EffectiveSeverity: packageSeverity,
-				ShortDescription:  f.Title,
+				ShortDescription:  f.VulnerabilityID,
 				LongDescription:   f.Description,
 				PackageIssue: []*grafeas.VulnerabilityOccurrence_PackageIssue{
 					{
@@ -187,10 +187,10 @@ func getVulnerabilitySeverity(v string) grafeas.Severity {
 	}
 }
 
-func newImageScanOccurrence(containerImage string) *grafeas.Occurrence {
+func newImageScanOccurrence(containerImage string, cveId string) *grafeas.Occurrence {
 	o := &grafeas.Occurrence{
 		ResourceUri: fmt.Sprintf("%s", containerImage),
-		NoteName:    fmt.Sprintf("projects/%s/notes/%s", "alcide", "trivy"),
+		NoteName:    cveId,
 	}
 
 	return o

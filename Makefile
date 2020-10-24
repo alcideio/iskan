@@ -151,6 +151,23 @@ helm-delete:  ##@Helm Delete Installation
 	helm -n alcide-iskan delete iskan
 
 #
+# HTML Viewer
+#
+viewer-deps:  ##@HTMLViewer Launch Dev Server for development
+	cd htmlviewer && npm install
+
+viewer-dev:  ##@HTMLViewer Launch Dev Server for development
+	cd htmlviewer && npm run dev
+
+#
+# 1. Get alcide builder NPMJS token from 1password
+# 2. export NODE_AUTH_TOKEN=<The Token>
+viewer-release:  ##@HTMLViewer Launch Dev Server for development
+	cd htmlviewer &&\
+	npm clean-install &&\
+	npm run prod &&\
+	npm publish --access public
+#
 # RELEASE
 #
 
