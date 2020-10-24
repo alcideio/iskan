@@ -19,7 +19,7 @@ jobs:
         with:
           version: v0.9.0
           cluster_name: iskan
-          node_image: kindest/node:${{ matrix.config.kubever }}
+          node_image: kindest/node:v1.19.1
           wait: 5m
 
       - name: Coverage

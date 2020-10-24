@@ -149,25 +149,16 @@ func getImageScanFindings(ecrclient ecrClient, containerImage string) ([]*grafea
 		return nil, errors.NewAggregate(errs)
 	}
 
-	vulnOccurences, err := getFindings(findings)
+	vulnOccurences, err := getFindings(findings, ecrAccount, ecrRegion, image, tag, digest)
 	if err != nil {
 		return nil, err
 	}
 
-	occurrences := make([]*grafeas.Occurrence, 0)
-
-	for _, v := range vulnOccurences {
-		o := newImageScanOccurrence(ecrAccount, ecrRegion, image, tag, digest, "XXX")
-		o.Details = v
-		o.Kind = grafeas.NoteKind_VULNERABILITY
-		occurrences = append(occurrences, o)
-	}
-
-	return occurrences, nil
+	return vulnOccurences, nil
 }
 
-func getFindings(findings []*ecr.ImageScanFinding) ([]*grafeas.Occurrence_Vulnerability, error) {
-	vulnerabilityDetails := make([]*grafeas.Occurrence_Vulnerability, 0)
+func getFindings(findings []*ecr.ImageScanFinding, ecrAccount string, ecrRegion string, image string, tag string, digest string) ([]*grafeas.Occurrence, error) {
+	vulnerabilityDetails := make([]*grafeas.Occurrence, 0)
 
 	for _, p := range findings {
 		var packageURI, packageName, packageVersion string
@@ -204,7 +195,11 @@ func getFindings(findings []*ecr.ImageScanFinding) ([]*grafeas.Occurrence_Vulner
 				},
 			},
 		}
-		vulnerabilityDetails = append(vulnerabilityDetails, v)
+		o := newImageScanOccurrence(ecrAccount, ecrRegion, image, tag, digest, aws.StringValue(p.Name))
+		o.Details = v
+		o.Kind = grafeas.NoteKind_VULNERABILITY
+
+		vulnerabilityDetails = append(vulnerabilityDetails, o)
 	}
 
 	return vulnerabilityDetails, nil
@@ -237,10 +232,10 @@ func getVulnerabilitySeverity(v string) grafeas.Severity {
 	}
 }
 
-func newImageScanOccurrence(accountId string, region string, repo string, tag string, digest string, queueName string) *grafeas.Occurrence {
+func newImageScanOccurrence(accountId string, region string, repo string, tag string, digest string, cveId string) *grafeas.Occurrence {
 	o := &grafeas.Occurrence{
 		ResourceUri: ecrOccurrenceResourceURI(accountId, region, repo, tag, digest),
-		NoteName:    ecrOccurrenceNote(queueName),
+		NoteName:    cveId,
 	}
 
 	return o
@@ -248,8 +243,4 @@ func newImageScanOccurrence(accountId string, region string, repo string, tag st
 
 func ecrOccurrenceResourceURI(account, region, repository, tag, digest string) string {
 	return fmt.Sprintf("%s.dkr.ecr.%s.amazonaws.com/%s:%s@%s", account, region, repository, tag, digest)
-}
-
-func ecrOccurrenceNote(queueName string) string {
-	return fmt.Sprintf("projects/%s/notes/%s", "alcide", queueName)
 }

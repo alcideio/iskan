@@ -49,7 +49,7 @@ func (r *HtmlReport) Generate() (out string, err error) {
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
     integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous" />
 
-	<link rel="stylesheet" href="https://unpkg.com/@alcideio/alcide-skan-viewer@0.1.3/dist/main.css"  />
+	<link rel="stylesheet" href="https://unpkg.com/@alcideio/iskan-viewer@latest/dist/main.css"  />
 
 </head>
 
@@ -58,10 +58,10 @@ func (r *HtmlReport) Generate() (out string, err error) {
     You need to enable JavaScript to run this app.
   </noscript>
   	<script type='text/javascript'>
-		window['skanReportData'] = {{ generateData }}
+		window['iskanReportData'] = {{ generateData }}
   	</script>
   	<div id="root"></div>
-	<script src="https://unpkg.com/@alcideio/alcide-skan-viewer@0.1.3/dist/main.js" crossorigin="anonymous"></script>
+	<script src="https://unpkg.com/@alcideio/iskan-viewer@latest/dist/main.js" crossorigin="anonymous"></script>
 </body>
 
 </html>
