@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/kylelemons/godebug/pretty"
 	"os"
+	"strconv"
 	"strings"
 
 	"github.com/alcideio/iskan/pkg/types"
@@ -102,11 +103,12 @@ func getImageScanFindings(ecrclient ecrClient, containerImage string) ([]*grafea
 	ecrRegion := hostPart[3]
 
 	image := strings.TrimPrefix(repo, "/")
-	awsRepoName := strings.SplitAfterN(repo, "/", 2)
+	awsRepoName := strings.Split(repo, "/")
+	awsRepo := strings.Join(awsRepoName[1:], "/")
 
 	input := &ecr.DescribeImageScanFindingsInput{
 		RegistryId:     aws.String(ecrAccount),
-		RepositoryName: aws.String(awsRepoName[1]),
+		RepositoryName: aws.String(awsRepo),
 		ImageId:        &ecr.ImageIdentifier{},
 	}
 
@@ -162,15 +164,22 @@ func getFindings(findings []*ecr.ImageScanFinding, ecrAccount string, ecrRegion 
 
 	for _, p := range findings {
 		var packageURI, packageName, packageVersion string
+		var cvss2Score float32
 
 		packageSeverity := getVulnerabilitySeverity(*p.Severity)
 
 		//FIXME
 		for _, k := range p.Attributes {
-			if *k.Key == "package_name" {
+			switch *k.Key {
+			case "package_name":
 				packageName = *k.Value
-			} else if *k.Key == "package_version" {
+			case "package_version":
 				packageVersion = *k.Value
+			//case "CVSS2_VECTOR":
+			//	cvss2vector = *k.Value
+			case "CVSS2_SCORE":
+				score, _ := strconv.ParseFloat(*k.Value, 32)
+				cvss2Score = float32(score)
 			}
 		}
 
@@ -178,7 +187,9 @@ func getFindings(findings []*ecr.ImageScanFinding, ecrAccount string, ecrRegion 
 
 		v := &grafeas.Occurrence_Vulnerability{
 			Vulnerability: &grafeas.VulnerabilityOccurrence{
-				Severity: packageSeverity,
+				Severity:        packageSeverity,
+				LongDescription: aws.StringValue(p.Description),
+				CvssScore:       cvss2Score,
 				PackageIssue: []*grafeas.VulnerabilityOccurrence_PackageIssue{
 					{
 						AffectedCpeUri:  packageURI,
