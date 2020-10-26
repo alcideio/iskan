@@ -95,8 +95,18 @@ export default function CveTable({ findings }) {
             { title: 'Effective', field: 'Info.EffectiveSeverity', width: "10px" },            
             { title: 'CVSS', field: 'Info.CvssScore', width: "10px" },      
             { title: 'Package', field: 'Info.AffectedPackage', width: "10px" },
-            { title: 'CVE', field: 'Id', width: "150px" },
-            { title: 'Description', field: 'Info.Description' },
+            {
+                title: 'CVE',
+                field: 'Id',
+                width: "150px",
+                render: rowData => {
+                    if (rowData.References !== undefined && rowData.References !== null && rowData.References.length > 0) {
+                        return <a target="_blank" href={rowData.References[0]}>{rowData.Id}</a>
+                    }
+                    return rowData.Id
+                }
+            },
+            { title: 'Description', field: 'Description' },
             { title: 'Image', field: 'Info.Image', defaultGroupOrder: 0 },            
         ]}
         data={findings}
