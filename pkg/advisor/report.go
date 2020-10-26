@@ -14,7 +14,7 @@ import (
 	"time"
 )
 
-func GenerateAdvisorReport(res *types.ScanTaskResult) (*AdvisorClusterReport, error) {
+func GenerateAdvisorReport(res *types.ScanTaskResult, clusterUID string) (*AdvisorClusterReport, error) {
 	advisorReport := &AdvisorClusterReport{
 		AdvisorReportHeader: AdvisorReportHeader{
 			CreationTimeStamp: time.Now().Format(time.RFC3339),
@@ -23,6 +23,7 @@ func GenerateAdvisorReport(res *types.ScanTaskResult) (*AdvisorClusterReport, er
 			ScannerVersion:    fmt.Sprintf("%v-%v", version.Version, version.Commit),
 			MSTimeStamp:       0,
 			ProfileID:         "iskan",
+			ClusterUID:        clusterUID,
 		},
 		Reports: map[string]*AdvisorReportData{},
 	}
@@ -101,6 +102,13 @@ func GenerateAdvisorReport(res *types.ScanTaskResult) (*AdvisorClusterReport, er
 						finding.Info["FixedPackage"] = pkg.FixedPackage
 						if pkg.FixedVersion != nil {
 							finding.Info["FixedVersion"] = pkg.FixedVersion.FullName
+						}
+					}
+
+					if len(vul.RelatedUrls) > 0 {
+						finding.References = make([]string, len(vul.RelatedUrls))
+						for i, urlRef := range vul.RelatedUrls {
+							finding.References[i] = urlRef.Url
 						}
 					}
 

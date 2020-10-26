@@ -169,7 +169,7 @@ func (cs *ClusterScanner) Scan() (*types.ClusterScanReport, error) {
 	}
 
 	//FIXME: REMOVE OUTSIDE
-	cs.advisorReport, _ = advisor.GenerateAdvisorReport(res)
+	cs.advisorReport, _ = advisor.GenerateAdvisorReport(res, report.ClusterId)
 
 	return report, errors.NewAggregate(errs)
 }
