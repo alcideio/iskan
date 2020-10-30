@@ -49,8 +49,6 @@ iskan --cluster-context mycluster --api-config myconfig.yaml
 <details>
   <summary>iskan cluster command reference(Click to expand)</summary>  
 
-
-    ```shell script
     Get vulnerabilities information on the presently running containers
     
     Usage:
@@ -76,7 +74,6 @@ iskan --cluster-context mycluster --api-config myconfig.yaml
     
     Global Flags:
       -v, --v Level   number for the log level verbosity
-    ```
 </details>
 
 <details>
