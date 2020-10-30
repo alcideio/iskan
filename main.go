@@ -20,8 +20,8 @@ func iSkanGenCmd() *cobra.Command {
 
 	var genBashCompletionCmd = &cobra.Command{
 		Use:   "bash-completion",
-		Short: "Generate bash completion. source < (advisor bash-completion)",
-		Long:  "Generate bash completion. source < (advisor bash-completion)",
+		Short: "Generate bash completion. source < (iskan bash-completion)",
+		Long:  "Generate bash completion. source < (iskan bash-completion)",
 		Run: func(cmd *cobra.Command, args []string) {
 			out := new(bytes.Buffer)
 			_ = rootCmd.GenBashCompletion(out)
