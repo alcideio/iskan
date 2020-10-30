@@ -48,32 +48,34 @@ iskan --cluster-context mycluster --api-config myconfig.yaml
 
 <details>
   <summary>iskan cluster command reference(Click to expand)</summary>  
+  
+```
+  Get vulnerabilities information on the presently running containers
 
-    Get vulnerabilities information on the presently running containers
-    
-    Usage:
-      iskan cluster [flags]
-    
-    Aliases:
-      cluster, scan-cluster
-    
-    Flags:
-      -c, --api-config string          The Vulnerability API configuration file name
-          --cluster-context string     Cluster Context .use 'kubectl config get-contexts' to list available contexts
-          --filter-cvss float32        Include CVEs with CVSS score greater or equal than the specified number. Valid values: 0.0-10.0
-          --filter-fixable-only        Include CVEs with which are fixable
-          --filter-severity string     Select which severities to include. Comma seperated MINIMAL,LOW,MEDIUM,HIGH,CRITICAL
-      -f, --format string              Output format. Supported formats: json | yaml | (default "json")
-      -h, --help                       help for cluster
-          --namespace-exclude string   Namespaces to exclude from the scan (default "kube-system")
-          --namespace-include string   Namespaces to include in the scan (default "*")
-      -o, --outfile string             Output file name. Use '-' to output to stdout (default "iskan")
-      -r, --report-config string       The Report configuration file name
-          --scan-api-burst int32       Maximum burst for throttle (default 100)
-          --scan-api-qps float32       Indicates the maximum QPS to the vuln providers (default 30)
-    
-    Global Flags:
-      -v, --v Level   number for the log level verbosity
+  Usage:
+    iskan cluster [flags]
+
+  Aliases:
+    cluster, scan-cluster
+
+  Flags:
+    -c, --api-config string          The Vulnerability API configuration file name
+        --cluster-context string     Cluster Context .use 'kubectl config get-contexts' to list available contexts
+        --filter-cvss float32        Include CVEs with CVSS score greater or equal than the specified number. Valid values: 0.0-10.0
+        --filter-fixable-only        Include CVEs with which are fixable
+        --filter-severity string     Select which severities to include. Comma seperated MINIMAL,LOW,MEDIUM,HIGH,CRITICAL
+    -f, --format string              Output format. Supported formats: json | yaml | html (default "json")
+    -h, --help                       help for cluster
+        --namespace-exclude string   Namespaces to exclude from the scan (default "kube-system")
+        --namespace-include string   Namespaces to include in the scan (default "*")
+    -o, --outfile string             Output file name. Use '-' to output to stdout (default "alcide-iskan.report")
+    -r, --report-config string       The Report configuration file name
+        --scan-api-burst int32       Maximum burst for throttle (default 100)
+        --scan-api-qps float32       Indicates the maximum QPS to the vuln providers (default 30)
+
+  Global Flags:
+    -v, --v Level   number for the log level verbosity
+```
 </details>
 
 <details>
