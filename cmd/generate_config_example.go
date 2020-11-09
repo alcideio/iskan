@@ -94,6 +94,18 @@ func NewCommandGenerateApiConfigExample() *cobra.Command {
 							},
 						},
 					},
+					{
+						Kind:       vulnprovider.ProviderKind_HARBOR,
+						Repository: "core.harbor.domain",
+						Creds: types.VulnProviderAPICreds{
+							Harbor: &types.HarborConfig{
+								Insecure: false,
+								Host:     "core.harbor.domain",
+								Username: "admin",
+								Password: "Harbor12345",
+							},
+						},
+					},
 				},
 			}
 

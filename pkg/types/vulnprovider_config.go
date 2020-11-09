@@ -15,6 +15,15 @@ type VulnProviderAPICreds struct {
 	ACR *Azure `json:"acr,omitempty"`
 
 	Trivy *TrivyConfig `json:"trivy,omitempty"`
+
+	Harbor *HarborConfig `json:"harbor,omitempty"`
+}
+
+type HarborConfig struct {
+	Insecure bool   `json:"insecure,omitempty" envconfig:"HARBOR_INSECURE" default:"false"`
+	Host     string `json:"host,omitempty" envconfig:"HARBOR_HOST" default:"localhost"`
+	Username string `json:"username,omitempty" envconfig:"HARBOR_USERNAME" default:""`
+	Password string `json:"password,omitempty" envconfig:"HARBOR_PASSWORD" default:""`
 }
 
 type TrivyConfig struct {

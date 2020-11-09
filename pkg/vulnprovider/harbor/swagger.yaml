@@ -1,0 +1,257 @@
+swagger: '2.0'
+info:
+  title: Harbor API
+  description: These APIs provide services for manipulating Harbor project.
+  version: '2.0'
+host: localhost
+schemes:
+  - http
+  - https
+basePath: /api/v2.0
+produces:
+  - application/json
+consumes:
+  - application/json
+securityDefinitions:
+  basic:
+    type: basic
+security:
+  - basic: []
+  - {}
+paths:
+  /projects/{project_name}/repositories/{repository_name}/artifacts/{reference}/additions/{addition}:
+    get:
+      summary: Get the addition of the specific artifact
+      description: Get the addition of the artifact specified by the reference under the project and repository.
+      tags:
+        - artifact
+      operationId: getAddition
+      parameters:
+        - $ref: '#/parameters/requestId'
+        - $ref: '#/parameters/projectName'
+        - $ref: '#/parameters/repositoryName'
+        - $ref: '#/parameters/reference'
+        - name: addition
+          in: path
+          description: The type of addition.
+          type: string
+          enum: [build_history, values.yaml, readme.md, dependencies, vulnerabilities]
+          required: true
+      responses:
+        '200':
+          description: Success
+          headers:
+            Content-Type:
+              description: The content type of the addition
+              type: string
+          schema:
+            # NOTE: changed from string to object to make the generated client actually work
+            type: object
+            additionalProperties: true
+        '400':
+          $ref: '#/responses/400'
+        '401':
+          $ref: '#/responses/401'
+        '403':
+          $ref: '#/responses/403'
+        '404':
+          $ref: '#/responses/404'
+        '500':
+          $ref: '#/responses/500'
+parameters:
+  query:
+    name: q
+    description: Query string to query resources. Supported query patterns are "exact match(k=v)", "fuzzy match(k=~v)", "range(k=[min~max])", "list with union releationship(k={v1 v2 v3})" and "list with intersetion relationship(k=(v1 v2 v3))". The value of range and list can be string(enclosed by " or '), integer or time(in format "2020-04-09 02:36:00"). All of these query patterns should be put in the query string "q=xxx" and splitted by ",". e.g. q=k1=v1,k2=~v2,k3=[min~max]
+    in: query
+    type: string
+    required: false
+  requestId:
+    name: X-Request-Id
+    description: An unique ID for the request
+    in: header
+    type: string
+    required: false
+    minLength: 1
+  projectName:
+    name: project_name
+    in: path
+    description: The name of the project
+    required: true
+    type: string
+  projectId:
+    name: project_id
+    in: path
+    description: The ID of the project
+    required: true
+    type: integer
+    format: int64
+  repositoryName:
+    name: repository_name
+    in: path
+    description: The name of the repository. If it contains slash, encode it with URL encoding. e.g. a/b -> a%252Fb
+    required: true
+    type: string
+  reference:
+    name: reference
+    in: path
+    description: The reference of the artifact, can be digest or tag
+    required: true
+    type: string
+  digest:
+    name: digest
+    in: path
+    description: The digest of the resource
+    required: true
+    type: string
+  tagName:
+    name: tag_name
+    in: path
+    description: The name of the tag
+    required: true
+    type: string
+  page:
+    name: page
+    in: query
+    type: integer
+    format: int64
+    required: false
+    description: The page number
+    default: 1
+  pageSize:
+    name: page_size
+    in: query
+    type: integer
+    format: int64
+    required: false
+    description: The size of per page
+    default: 10
+    maximum: 100
+  instanceName:
+    name: preheat_instance_name
+    in: path
+    description: Instance Name
+    required: true
+    type: string
+  preheatPolicyName:
+    name: preheat_policy_name
+    in: path
+    description: Preheat Policy Name
+    required: true
+    type: string
+  executionId:
+    name: execution_id
+    in: path
+    description: Execution ID
+    required: true
+    type: integer
+  taskId:
+    name: task_id
+    in: path
+    description: Task ID
+    required: true
+    type: integer
+responses:
+  '200':
+    description: Success
+    headers:
+      X-Request-Id:
+        description: The ID of the corresponding request for the response
+        type: string
+  '201':
+    description: Created
+    headers:
+      X-Request-Id:
+        description: The ID of the corresponding request for the response
+        type: string
+      Location:
+        description: The location of the resource
+        type: string
+  '202':
+    description: Accepted
+    headers:
+      X-Request-Id:
+        description: The ID of the corresponding request for the response
+        type: string
+  '400':
+    description: Bad request
+    headers:
+      X-Request-Id:
+        description: The ID of the corresponding request for the response
+        type: string
+    schema:
+      $ref: '#/definitions/Errors'
+  '401':
+    description: Unauthorized
+    headers:
+      X-Request-Id:
+        description: The ID of the corresponding request for the response
+        type: string
+    schema:
+      $ref: '#/definitions/Errors'
+  '403':
+    description: Forbidden
+    headers:
+      X-Request-Id:
+        description: The ID of the corresponding request for the response
+        type: string
+    schema:
+      $ref: '#/definitions/Errors'
+  '404':
+    description: Not found
+    headers:
+      X-Request-Id:
+        description: The ID of the corresponding request for the response
+        type: string
+    schema:
+      $ref: '#/definitions/Errors'
+  '405':
+    description: Method not allowed
+    headers:
+      X-Request-Id:
+        description: The ID of the corresponding request for the response
+        type: string
+    schema:
+      $ref: '#/definitions/Errors'
+  '409':
+    description: Conflict
+    headers:
+      X-Request-Id:
+        description: The ID of the corresponding request for the response
+        type: string
+    schema:
+      $ref: '#/definitions/Errors'
+  '412':
+    description: Precondition failed
+    headers:
+      X-Request-Id:
+        description: The ID of the corresponding request for the response
+        type: string
+    schema:
+      $ref: '#/definitions/Errors'
+  '500':
+    description: Internal server error
+    headers:
+      X-Request-Id:
+        description: The ID of the corresponding request for the response
+        type: string
+    schema:
+      $ref: '#/definitions/Errors'
+definitions:
+  Errors:
+    description: The error array that describe the errors got during the handling of request
+    type: object
+    properties:
+      errors:
+        type: array
+        items:
+          $ref: '#/definitions/Error'
+  Error:
+    description: a model for all the error response coming from harbor
+    type: object
+    properties:
+      code:
+        type: string
+        description: The error code
+      message:
+        type: string
+        description: The error message

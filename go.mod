@@ -9,9 +9,14 @@ require (
 	github.com/Azure/go-autorest/autorest/adal v0.9.5
 	github.com/Azure/go-autorest/autorest/azure/auth v0.5.3
 	github.com/Azure/go-autorest/autorest/validation v0.3.0 // indirect
-	github.com/aws/aws-sdk-go v1.34.20
+	github.com/aws/aws-sdk-go v1.34.28
 	github.com/docker/distribution v2.7.1+incompatible
 	github.com/fatih/color v1.9.0
+	github.com/go-openapi/errors v0.19.8
+	github.com/go-openapi/runtime v0.19.23
+	github.com/go-openapi/strfmt v0.19.8
+	github.com/go-openapi/swag v0.19.9
+	github.com/go-openapi/validate v0.19.12 // indirect
 	github.com/gogo/protobuf v1.3.1
 	github.com/google/gofuzz v1.2.0 // indirect
 	github.com/imdario/mergo v0.3.11 // indirect
@@ -24,7 +29,7 @@ require (
 	github.com/spf13/cobra v1.0.0
 	github.com/spf13/pflag v1.0.5
 	github.com/spf13/viper v1.4.0
-	github.com/stretchr/testify v1.5.1
+	github.com/stretchr/testify v1.6.1
 	google.golang.org/api v0.31.0
 	google.golang.org/genproto v0.0.0-20200831141814-d751682dd103
 	gopkg.in/yaml.v2 v2.3.0

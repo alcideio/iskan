@@ -59,7 +59,9 @@ get-bins: get-release-bins ##@build Download UPX
 	tar xvf upx-${UPX_VERSION}-amd64_linux.tar.xz &&\
 	mkdir -p $(CURDIR)/bin || echo "dir already exist" &&\
 	cp upx-${UPX_VERSION}-amd64_linux/upx $(CURDIR)/bin/upx &&\
-	rm -Rf upx-${UPX_VERSION}-amd64_linux*
+	rm -Rf upx-${UPX_VERSION}-amd64_linux* &&\
+	wget https://github.com/go-swagger/go-swagger/releases/download/v0.25.0/swagger_linux_amd64 &&\
+	rm bin/swagger || true && mv swagger_linux_amd64 bin/swagger && chmod +x bin/swagger
 
 get-release-bins: ##@build Download goreleaser
 	mkdir -p $(CURDIR)/bin || echo "dir already exist" &&\
@@ -71,6 +73,13 @@ get-release-bins: ##@build Download goreleaser
 #
 # BUILD
 #
+
+
+.PHONY: build-gen-harbor-client
+gen-harbor-client: ##@build Build on local platform
+	bin/swagger generate client --spec pkg/vulnprovider/harbor/swagger.yaml --target pkg/vulnprovider/harbor
+
+
 
 .PHONY: build
 build: ##@build Build on local platform
@@ -127,7 +136,7 @@ e2e-build-images: ##@e2e build test images
     done
 
 create-kind-cluster:  ##@Test creatte KIND cluster
-	kind create cluster --image kindest/node:v1.18.2 --name iskan
+	kind create cluster --image kindest/node:v1.18.2 --name iskan --config hack/kind-config.yaml
 
 delete-kind-cluster:  ##@Test delete KIND cluster
 	kind delete cluster --name iskan
