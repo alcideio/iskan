@@ -106,6 +106,16 @@ func NewCommandGenerateApiConfigExample() *cobra.Command {
 							},
 						},
 					},
+					{
+						Kind:       vulnprovider.ProviderKind_INSIGHTVM,
+						Repository: "*",
+						Creds: types.VulnProviderAPICreds{
+							InsightVM: &types.InsightVM{
+								ApiKey: "MyApiKey",
+								Region: "us",
+							},
+						},
+					},
 				},
 			}
 

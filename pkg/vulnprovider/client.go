@@ -11,17 +11,19 @@ import (
 	"github.com/alcideio/iskan/pkg/vulnprovider/ecr"
 	"github.com/alcideio/iskan/pkg/vulnprovider/gcr"
 	"github.com/alcideio/iskan/pkg/vulnprovider/harbor"
+	"github.com/alcideio/iskan/pkg/vulnprovider/insightvm"
 	"github.com/alcideio/iskan/pkg/vulnprovider/trivy"
 )
 
 const (
-	ProviderKind_ECR     string = "ecr"
-	ProviderKind_GCR     string = "gcr"
-	ProviderKind_ACR     string = "acr"
-	ProviderKind_HARBOR  string = "harbor" //Local Processor
-	ProviderKind_DTR     string = "dtr"    //Dockdr Hub Enterprise
-	ProviderKind_TRIVY   string = "trivy"  //Local Processor
-	ProviderKind_UNKNOWN string = "unknown"
+	ProviderKind_ECR       string = "ecr"
+	ProviderKind_GCR       string = "gcr"
+	ProviderKind_ACR       string = "acr"
+	ProviderKind_HARBOR    string = "harbor"
+	ProviderKind_INSIGHTVM string = "insightvm"
+	ProviderKind_DTR       string = "dtr"   //Dockdr Hub Enterprise
+	ProviderKind_TRIVY     string = "trivy" //Local Processor
+	ProviderKind_UNKNOWN   string = "unknown"
 )
 
 func NewImageVulnerabilitiesFinder(kind string, cred *types.VulnProviderAPICreds) (types.ImageVulnerabilitiesFinder, error) {
@@ -36,6 +38,8 @@ func NewImageVulnerabilitiesFinder(kind string, cred *types.VulnProviderAPICreds
 		return trivy.NewImageVulnerabilitiesFinder(cred)
 	case ProviderKind_HARBOR:
 		return harbor.NewImageVulnerabilitiesFinder(cred)
+	case ProviderKind_INSIGHTVM:
+		return insightvm.NewImageVulnerabilitiesFinder(cred)
 	case ProviderKind_DTR:
 		return nil, fmt.Errorf("registry type '%v' is not supported", kind)
 	default:

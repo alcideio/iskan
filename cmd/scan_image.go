@@ -2,13 +2,13 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/alcideio/iskan/pkg/report"
-	"k8s.io/client-go/util/flowcontrol"
 	"os"
 
+	"github.com/alcideio/iskan/pkg/report"
 	"github.com/alcideio/iskan/pkg/scan"
 	"github.com/alcideio/iskan/pkg/types"
 	"github.com/spf13/cobra"
+	"k8s.io/client-go/util/flowcontrol"
 )
 
 func NewCommandScanImage() *cobra.Command {
@@ -33,6 +33,7 @@ func NewCommandScanImage() *cobra.Command {
 				return err
 			}
 
+			//klog.V(10).Info("loaded supplied config", pretty.Sprint(config))
 			regsConfig := map[string]*types.VulnProviderConfig{}
 			for i, r := range config.Providers {
 				regsConfig[r.Repository] = &config.Providers[i]

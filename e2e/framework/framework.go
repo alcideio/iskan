@@ -95,6 +95,30 @@ func (f *Framework) AfterEach() {
 	Logf("Deleted test namespace '%v'", f.Namespace)
 }
 
+func (f *Framework) NewImageScannerWithConfig(policy *types.Policy, config *types.VulnProvidersConfig) *scan.ImageScanner {
+	var err error
+
+	if policy == nil {
+		policy = types.NewDefaultPolicy()
+	}
+
+	policy.Init()
+
+	scanner, err := scan.NewImageScanner(policy, config)
+	ExpectNoError(err)
+
+	return scanner
+}
+
+func (f *Framework) NewImageScanner(policy *types.Policy) *scan.ImageScanner {
+	var err error
+
+	config, err := types.LoadVulnProvidersConfigFromBuffer([]byte(GlobalConfig.ApiConfigFile))
+	ExpectNoError(err)
+
+	return f.NewImageScannerWithConfig(policy, config)
+}
+
 func (f *Framework) NewClusterScanner(policy *types.Policy) *scan.ClusterScanner {
 	var err error
 

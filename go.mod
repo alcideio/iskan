@@ -30,6 +30,7 @@ require (
 	github.com/spf13/pflag v1.0.5
 	github.com/spf13/viper v1.4.0
 	github.com/stretchr/testify v1.6.1
+	golang.org/x/oauth2 v0.0.0-20200107190931-bf48bf16ab8d
 	google.golang.org/api v0.31.0
 	google.golang.org/genproto v0.0.0-20200831141814-d751682dd103
 	gopkg.in/yaml.v2 v2.3.0

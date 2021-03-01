@@ -15,6 +15,9 @@ GOX           = $(GOPATH)/bin/gox
 GOIMPORTS     = $(GOPATH)/bin/goimports
 ARCH          = $(shell uname -p)
 
+USER_ID       = $(shell id -u)
+GROUP_ID      = $(shell id -g)
+
 UPX_VERSION := 3.96
 UPX := $(CURDIR)/iskan/bin/upx
 
@@ -79,6 +82,15 @@ get-release-bins: ##@build Download goreleaser
 gen-harbor-client: ##@build Build on local platform
 	bin/swagger generate client --spec pkg/vulnprovider/harbor/swagger.yaml --target pkg/vulnprovider/harbor
 
+.PHONY: build-gen-insightvm-client
+gen-insightvm-client: ##@build Build InsightVM Client (https://help.rapid7.com/insightvm/en-us/api/api.html)
+	docker run --rm \
+		-u $(USER_ID):$(GROUP_ID) \
+		-v $(CURDIR):/local openapitools/openapi-generator-cli generate \
+		-i /local/pkg/vulnprovider/insightvm/openapi.json \
+		--api-package insightvm \
+		-g go \
+		-o /local/pkg/vulnprovider/insightvm/client
 
 
 .PHONY: build
@@ -125,7 +137,8 @@ coverage: ##@test run tests with coverage report
 # 3. ACR: az acr login --name alcide --subscription 9efc9618-47a0-4e98-b31e-7194f25188d4 --resource-group  iskan
 # 4. Docker Hub: docker login --username alcide --password <GET PASSWORD REPO>
 #
-REGISTRIES ?= 893825821121.dkr.ecr.us-west-2.amazonaws.com/iskan gcr.io/dcvisor-162009/iskan/e2e alcide.azurecr.io/iskan iskan
+#REGISTRIES ?= 893825821121.dkr.ecr.us-west-2.amazonaws.com/iskan gcr.io/dcvisor-162009/iskan/e2e alcide.azurecr.io/iskan iskan
+REGISTRIES ?=  iskan
 e2e-build-images: ##@e2e build test images
 	@for reg in ${REGISTRIES}; \
 	do \
