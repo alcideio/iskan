@@ -25,4 +25,5 @@ config-example.yaml
 report-filter.yaml
 e2e/images/*/build.txt
 creds.sh
+go.sum
 
