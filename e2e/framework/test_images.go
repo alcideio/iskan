@@ -19,6 +19,7 @@ type TestImageInfo struct {
 	Image string
 	TestImageProperties
 	PullSecret string
+	Tags       sets.String
 }
 
 var CleanImageBuiltFromScratch = TestImageProperties{
@@ -139,6 +140,20 @@ func FilterByPublicRegistries() func(info *TestImageInfo) bool {
 	}
 }
 
+func FilterByHasAnyTag(tags sets.String) func(info *TestImageInfo) bool {
+	return func(info *TestImageInfo) bool {
+		if info.Tags == nil {
+			return false
+		}
+
+		if info.Tags.HasAny(tags.List()...) {
+			return true
+		}
+
+		return false
+	}
+}
+
 var TestImages = []TestImageInfo{
 	//GCR
 	{
@@ -201,5 +216,11 @@ var TestImages = []TestImageInfo{
 		Image:               "iskan/vuln_alpine:latest",
 		TestImageProperties: AlpineImage, //ECR doesn't like images from scratch
 		PullSecret:          "",
+	},
+	{
+		Image:               "alcide/iskan:v1.3.0-localscan",
+		TestImageProperties: AlpineImage, //ECR doesn't like images from scratch
+		PullSecret:          "insightvm",
+		Tags:                sets.NewString("insightvm"),
 	},
 }

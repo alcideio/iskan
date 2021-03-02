@@ -23,6 +23,7 @@ Harness your existing Container Image Vulnerability Scanning information to your
 - [x] AWS ECR
 - [x] GCP GCR
 - [x] Azure ACR (Preview)
+- [x] Rapid7 InsightVM (Preview)
 - [x] Harbor - v2.0 API
 - [x] Inline Local Scanner - Trivy (Experimental)
   
@@ -131,6 +132,13 @@ providers:
         username: admin
         password: Harbor12345
         insecure: false
+
+  - kind: "insightvm"
+    repository: "alcide/iskan"
+    creds:
+      insightvm:
+        apikey: "your-api-key"
+        region: "us"
 ```
   
 </details>
@@ -142,6 +150,7 @@ providers:
 | **ECR** | [ECR Policies](https://docs.aws.amazon.com/AmazonECR/latest/userguide/ecr_managed_policies.html), [ECR Image Scanning](https://docs.aws.amazon.com/AmazonECR/latest/userguide/image-scanning.html#describe-scan-findings) |
 | **GCR** | [Enabling the Container Scanning API](https://cloud.google.com/container-registry/docs/enabling-disabling-container-analysis#enable-scanning)                      |
 | **ACR** | [Azure Defender](https://docs.microsoft.com/en-us/azure/security-center/defender-for-container-registries-introduction), [Vulnerability Assessment in Azure](https://techcommunity.microsoft.com/t5/azure-security-center/exporting-azure-container-registry-vulnerability-assessment-in/ba-p/1255244)|
+| **InsightVM** | [InsightVM Container Security](https://www.rapid7.com/products/insightvm/features/container-security/)|
 | **Harbor** | [Harbor Administration](https://goharbor.io/docs/2.1.0/administration/vulnerability-scanning/)|
 | **Trivy** | [Trivy on GitHub](https://github.com/aquasecurity/trivy)|
 
@@ -189,7 +198,7 @@ Global Flags:
 - [x] Report export to 3rd party integrations (Slack, Webhook, ...)
 - [x] Report formats (json, yaml)
 - [x] Fancy HTML report
-- [ ] Examples & Documentation
+- [x] Examples & Documentation
 - [ ] Running in watch mode
 - [ ] kubectl iskan plugin
   

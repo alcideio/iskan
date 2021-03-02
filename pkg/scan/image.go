@@ -2,6 +2,7 @@ package scan
 
 import (
 	"context"
+	"fmt"
 	"github.com/kylelemons/godebug/pretty"
 	"k8s.io/client-go/util/flowcontrol"
 
@@ -74,4 +75,49 @@ func ScanImage(image string, policy *types.Policy, config *types.VulnProviderCon
 	klog.V(8).Infof("%v", pretty.Sprint(result))
 
 	return result, nil
+}
+
+type ImageScanner struct {
+	Policy *types.Policy
+
+	ProvidersConfig types.VulnProvidersConfig
+
+	flowControl flowcontrol.RateLimiter
+}
+
+func NewImageScanner(policy *types.Policy, providersConfig *types.VulnProvidersConfig) (*ImageScanner, error) {
+	var ratelimiter flowcontrol.RateLimiter
+
+	if policy == nil || providersConfig == nil {
+		return nil, fmt.Errorf("Invalid call")
+	}
+
+	//klog.V(10).Info("providersConfig", pretty.Sprint(providersConfig))
+
+	// Conditionally configure rate limits
+	if policy.RateLimit.ApiQPS > 0 {
+		ratelimiter = flowcontrol.NewTokenBucketRateLimiter(policy.RateLimit.ApiQPS, int(policy.RateLimit.ApiBurst))
+	} else {
+		// if rate limits are configured off, c.operationPollRateLimiter.Accept() is a no-op
+		ratelimiter = flowcontrol.NewFakeAlwaysRateLimiter()
+	}
+
+	return &ImageScanner{
+		Policy:          policy,
+		ProvidersConfig: *providersConfig,
+
+		flowControl: ratelimiter,
+	}, nil
+}
+
+func (is *ImageScanner) Scan(image string) (*types.ImageScanResult, error) {
+
+	regsConfig := map[string]*types.VulnProviderConfig{}
+	for i, r := range is.ProvidersConfig.Providers {
+		regsConfig[r.Repository] = &is.ProvidersConfig.Providers[i]
+	}
+
+	registryConfig := RegistryConfigForImage(image, regsConfig)
+
+	return ScanImage(image, is.Policy, registryConfig, is.flowControl)
 }

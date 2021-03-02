@@ -17,6 +17,14 @@ type VulnProviderAPICreds struct {
 	Trivy *TrivyConfig `json:"trivy,omitempty"`
 
 	Harbor *HarborConfig `json:"harbor,omitempty"`
+
+	InsightVM *InsightVM `json:"insightvm,omitempty"`
+}
+
+type InsightVM struct {
+	//https://help.rapid7.com/insightvm/en-us/api/api.html#section/Overview
+	ApiKey string `json:"apiKey,omitempty" envconfig:"INSIGHTVM_APIKEY" default:""`
+	Region string `json:"region,omitempty" envconfig:"INSIGHTVM_REGION" default:"us"`
 }
 
 type HarborConfig struct {
