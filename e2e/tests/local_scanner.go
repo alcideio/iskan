@@ -5,6 +5,7 @@ import (
 	"github.com/alcideio/iskan/e2e/framework"
 	"github.com/alcideio/iskan/pkg/scan"
 	"github.com/alcideio/iskan/pkg/types"
+	"github.com/alcideio/iskan/pkg/vulnprovider/api"
 	"github.com/kylelemons/godebug/pretty"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
@@ -46,7 +47,7 @@ var _ = Describe("[regression][local-scanner] Test local scanner vulnerability p
 			policy := types.NewDefaultPolicy()
 			policy.ScanScope.NamespaceInclude = f.Namespace
 
-			trivyConfig := types.DefaultTrivyConfig()
+			trivyConfig := api.DefaultTrivyConfig()
 
 			name, err := ioutil.TempDir("/tmp", fmt.Sprintf("%s-", "iskan-local-skan"))
 			Expect(err).To(BeNil())
@@ -55,9 +56,9 @@ var _ = Describe("[regression][local-scanner] Test local scanner vulnerability p
 			trivyConfig.CacheDir = name
 			trivyConfig.ReportsDir = name
 
-			config := types.VulnProvidersConfig{
-				Providers: []types.VulnProviderConfig{
-					{Kind: "trivy", Repository: "*", Creds: types.VulnProviderAPICreds{
+			config := api.VulnProvidersConfig{
+				Providers: []api.VulnProviderConfig{
+					{Kind: "trivy", Repository: "*", Creds: api.VulnProviderAPICreds{
 						Trivy: trivyConfig,
 					}},
 				},

@@ -5,7 +5,7 @@ import (
 	. "github.com/onsi/ginkgo"
 
 	"github.com/alcideio/iskan/e2e/framework"
-	"github.com/alcideio/iskan/pkg/types"
+	types "github.com/alcideio/iskan/pkg/vulnprovider/api"
 )
 
 var _ = Describe("[regression][insightvm] Test InsightVM vulnerability providers", func() {
