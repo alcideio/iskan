@@ -7,6 +7,7 @@ import (
 	"github.com/alcideio/iskan/pkg/report"
 	"github.com/alcideio/iskan/pkg/scan"
 	"github.com/alcideio/iskan/pkg/types"
+	"github.com/alcideio/iskan/pkg/vulnprovider/api"
 	"github.com/spf13/cobra"
 	"k8s.io/client-go/util/flowcontrol"
 )
@@ -28,13 +29,13 @@ func NewCommandScanImage() *cobra.Command {
 				return cmd.Usage()
 			}
 
-			config, err := types.LoadVulnProvidersConfig(vulAPIConfig)
+			config, err := api.LoadVulnProvidersConfig(vulAPIConfig)
 			if err != nil {
 				return err
 			}
 
 			//klog.V(10).Info("loaded supplied config", pretty.Sprint(config))
-			regsConfig := map[string]*types.VulnProviderConfig{}
+			regsConfig := map[string]*api.VulnProviderConfig{}
 			for i, r := range config.Providers {
 				regsConfig[r.Repository] = &config.Providers[i]
 			}

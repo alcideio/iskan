@@ -2,8 +2,10 @@ package cmd
 
 import (
 	"fmt"
+
 	"github.com/alcideio/iskan/pkg/types"
 	"github.com/alcideio/iskan/pkg/vulnprovider"
+	"github.com/alcideio/iskan/pkg/vulnprovider/api"
 	"github.com/spf13/cobra"
 	"google.golang.org/genproto/googleapis/grafeas/v1"
 	"gopkg.in/yaml.v2"
@@ -32,13 +34,13 @@ func NewCommandGenerateApiConfigExample() *cobra.Command {
 		Use:   "api-config",
 		Short: "Generate Api Configuration File Example",
 		Run: func(cmd *cobra.Command, args []string) {
-			c := types.VulnProvidersConfig{
-				Providers: []types.VulnProviderConfig{
+			c := api.VulnProvidersConfig{
+				Providers: []api.VulnProviderConfig{
 					{
 						Kind:       vulnprovider.ProviderKind_ECR,
 						Repository: "666666.dkr.ecr.us-west-2.amazonaws.com/iskan",
-						Creds: types.VulnProviderAPICreds{
-							ECR: &types.ECR{
+						Creds: api.VulnProviderAPICreds{
+							ECR: &api.ECR{
 								AccessKeyId:     "mykeyid",
 								SecretAccessKey: "mysecretkey",
 								Region:          "us-west-2",
@@ -48,8 +50,8 @@ func NewCommandGenerateApiConfigExample() *cobra.Command {
 					{
 						Kind:       vulnprovider.ProviderKind_ACR,
 						Repository: "myrepo.azurecr.io/iskan",
-						Creds: types.VulnProviderAPICreds{
-							ACR: &types.Azure{
+						Creds: api.VulnProviderAPICreds{
+							ACR: &api.Azure{
 								TenantId:       "my-tenant-uuid",
 								SubscriptionId: "my-subscription-uuid",
 								ClientId:       "client-id",
@@ -61,7 +63,7 @@ func NewCommandGenerateApiConfigExample() *cobra.Command {
 					{
 						Kind:       vulnprovider.ProviderKind_GCR,
 						Repository: "gcr.io/myproj",
-						Creds: types.VulnProviderAPICreds{
+						Creds: api.VulnProviderAPICreds{
 							GCR: `{
   "type": "service_account",
   "project_id": "myproj",
@@ -80,8 +82,8 @@ func NewCommandGenerateApiConfigExample() *cobra.Command {
 					{
 						Kind:       vulnprovider.ProviderKind_TRIVY,
 						Repository: "*",
-						Creds: types.VulnProviderAPICreds{
-							Trivy: &types.TrivyConfig{
+						Creds: api.VulnProviderAPICreds{
+							Trivy: &api.TrivyConfig{
 								CacheDir:      "/home/iskan/.cache/trivy",
 								ReportsDir:    "/home/iskan/.cache/reports",
 								DebugMode:     false,
@@ -97,8 +99,8 @@ func NewCommandGenerateApiConfigExample() *cobra.Command {
 					{
 						Kind:       vulnprovider.ProviderKind_HARBOR,
 						Repository: "core.harbor.domain",
-						Creds: types.VulnProviderAPICreds{
-							Harbor: &types.HarborConfig{
+						Creds: api.VulnProviderAPICreds{
+							Harbor: &api.HarborConfig{
 								Insecure: false,
 								Host:     "core.harbor.domain",
 								Username: "admin",
@@ -109,8 +111,8 @@ func NewCommandGenerateApiConfigExample() *cobra.Command {
 					{
 						Kind:       vulnprovider.ProviderKind_INSIGHTVM,
 						Repository: "*",
-						Creds: types.VulnProviderAPICreds{
-							InsightVM: &types.InsightVM{
+						Creds: api.VulnProviderAPICreds{
+							InsightVM: &api.InsightVM{
 								ApiKey: "MyApiKey",
 								Region: "us",
 							},

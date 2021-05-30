@@ -11,6 +11,7 @@ import (
 	"github.com/alcideio/iskan/pkg/scan"
 	"github.com/alcideio/iskan/pkg/types"
 	"github.com/alcideio/iskan/pkg/util"
+	"github.com/alcideio/iskan/pkg/vulnprovider/api"
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 	"sigs.k8s.io/yaml"
@@ -32,7 +33,7 @@ func NewCommandScanCluster() *cobra.Command {
 		RunE: func(cmd *cobra.Command, args []string) error {
 			var err error
 
-			config, err := types.LoadVulnProvidersConfig(vulAPIConfig)
+			config, err := api.LoadVulnProvidersConfig(vulAPIConfig)
 			if err != nil {
 				return err
 			}

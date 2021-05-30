@@ -2,7 +2,7 @@ package acr
 
 import (
 	"fmt"
-	"github.com/alcideio/iskan/pkg/types"
+	types "github.com/alcideio/iskan/pkg/vulnprovider/api"
 
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/adal"

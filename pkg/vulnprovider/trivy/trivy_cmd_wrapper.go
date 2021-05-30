@@ -6,8 +6,8 @@ import (
 	"os/exec"
 	"strings"
 
-	"github.com/alcideio/iskan/pkg/types"
 	"github.com/alcideio/iskan/pkg/util"
+	types "github.com/alcideio/iskan/pkg/vulnprovider/api"
 	"k8s.io/klog"
 )
 

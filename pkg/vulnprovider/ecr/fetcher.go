@@ -8,8 +8,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/alcideio/iskan/pkg/types"
 	"github.com/alcideio/iskan/pkg/util"
+	types "github.com/alcideio/iskan/pkg/vulnprovider/api"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"

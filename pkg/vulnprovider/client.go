@@ -5,9 +5,9 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/alcideio/iskan/pkg/types"
 	"github.com/alcideio/iskan/pkg/util"
 	"github.com/alcideio/iskan/pkg/vulnprovider/acr"
+	"github.com/alcideio/iskan/pkg/vulnprovider/api"
 	"github.com/alcideio/iskan/pkg/vulnprovider/ecr"
 	"github.com/alcideio/iskan/pkg/vulnprovider/gcr"
 	"github.com/alcideio/iskan/pkg/vulnprovider/harbor"
@@ -26,7 +26,7 @@ const (
 	ProviderKind_UNKNOWN   string = "unknown"
 )
 
-func NewImageVulnerabilitiesFinder(kind string, cred *types.VulnProviderAPICreds) (types.ImageVulnerabilitiesFinder, error) {
+func NewImageVulnerabilitiesFinder(kind string, cred *api.VulnProviderAPICreds) (api.ImageVulnerabilitiesFinder, error) {
 	switch strings.ToLower(kind) {
 	case ProviderKind_ECR:
 		return ecr.NewImageVulnerabilitiesFinder(cred)

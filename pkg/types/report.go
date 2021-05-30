@@ -3,7 +3,7 @@ package types
 import (
 	"time"
 
-	"google.golang.org/genproto/googleapis/grafeas/v1"
+	"github.com/alcideio/iskan/pkg/vulnprovider/api"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/util/rand"
 )
@@ -14,8 +14,8 @@ type PodSpecSummary struct {
 
 	Spec *v1.PodSpec
 
-	Severity SeveritySummary
-	Fixable  SeveritySummary
+	Severity api.SeveritySummary
+	Fixable  api.SeveritySummary
 
 	ScanFailures uint32
 }
@@ -24,13 +24,13 @@ type ClusterScanReportSummary struct {
 	// ns/podName --> Severity Vector
 	PodSummary map[string]PodSpecSummary
 
-	ClusterSeverity SeveritySummary
+	ClusterSeverity api.SeveritySummary
 
-	NamespaceSeverity SeveritySummaryMap
+	NamespaceSeverity api.SeveritySummaryMap
 
 	// ns/podName --> Severity Vector
-	PodSeverity        SeveritySummaryMap
-	PodFixableSeverity SeveritySummaryMap
+	PodSeverity        api.SeveritySummaryMap
+	PodFixableSeverity api.SeveritySummaryMap
 
 	FailedOrSkippedPods   []string
 	FailedOrSkippedImages []string
@@ -39,23 +39,8 @@ type ClusterScanReportSummary struct {
 	ExcludedPodCount uint32
 }
 
-type ImageScanResult struct {
-	Image string
-
-	CompletedOK bool
-	Reason      string
-
-	//If completed ok - this value should be populated with findings (if there are any)
-	Findings []*grafeas.Occurrence
-
-	//Stats
-	Summary      SeveritySummary
-	Fixable      SeveritySummary
-	ExcludeCount uint32
-}
-
 type ScanTaskResult struct {
-	Findings map[string]*ImageScanResult
+	Findings map[string]*api.ImageScanResult
 
 	ScannedPods []*v1.Pod
 	SkippedPods []*v1.Pod
@@ -75,7 +60,7 @@ type ClusterScanReport struct {
 	Policy Policy
 
 	// Report Findings
-	Findings map[string]*ImageScanResult
+	Findings map[string]*api.ImageScanResult
 
 	// High level stats about this report
 	Summary ClusterScanReportSummary
@@ -84,10 +69,10 @@ type ClusterScanReport struct {
 func NewClusterScanReportSummary() *ClusterScanReportSummary {
 	return &ClusterScanReportSummary{
 		PodSummary:            map[string]PodSpecSummary{},
-		ClusterSeverity:       NewSeveritySummary(),
-		NamespaceSeverity:     map[string]SeveritySummary{},
-		PodSeverity:           map[string]SeveritySummary{},
-		PodFixableSeverity:    map[string]SeveritySummary{},
+		ClusterSeverity:       api.NewSeveritySummary(),
+		NamespaceSeverity:     map[string]api.SeveritySummary{},
+		PodSeverity:           map[string]api.SeveritySummary{},
+		PodFixableSeverity:    map[string]api.SeveritySummary{},
 		AnalyzedPodCount:      0,
 		ExcludedPodCount:      0,
 		FailedOrSkippedPods:   []string{},
@@ -101,7 +86,7 @@ func NewClusterScanReport() *ClusterScanReport {
 		CreationTimeStamp: time.Now().Format(time.RFC3339),
 		ReportUUID:        rand.String(10),
 		Policy:            Policy{},
-		Findings:          map[string]*ImageScanResult{},
+		Findings:          map[string]*api.ImageScanResult{},
 		Summary:           ClusterScanReportSummary{},
 	}
 }

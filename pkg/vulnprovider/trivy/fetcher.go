@@ -7,8 +7,8 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/alcideio/iskan/pkg/types"
 	"github.com/alcideio/iskan/pkg/util"
+	types "github.com/alcideio/iskan/pkg/vulnprovider/api"
 	"google.golang.org/genproto/googleapis/grafeas/v1"
 )
 

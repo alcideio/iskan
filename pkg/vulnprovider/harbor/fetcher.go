@@ -15,8 +15,8 @@ import (
 	"k8s.io/apimachinery/pkg/util/errors"
 	"k8s.io/klog"
 
-	"github.com/alcideio/iskan/pkg/types"
 	"github.com/alcideio/iskan/pkg/util"
+	types "github.com/alcideio/iskan/pkg/vulnprovider/api"
 	"github.com/alcideio/iskan/pkg/vulnprovider/harbor/client"
 	"github.com/alcideio/iskan/pkg/vulnprovider/harbor/client/artifact"
 )
