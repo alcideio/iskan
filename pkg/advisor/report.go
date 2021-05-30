@@ -6,6 +6,7 @@ import (
 	"github.com/alcideio/iskan/pkg/types"
 	"github.com/alcideio/iskan/pkg/util"
 	"github.com/alcideio/iskan/pkg/version"
+	"github.com/alcideio/iskan/pkg/vulnprovider/api"
 	"google.golang.org/genproto/googleapis/grafeas/v1"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/util/rand"
@@ -44,7 +45,7 @@ func GenerateAdvisorReport(res *types.ScanTaskResult, clusterUID string) (*Advis
 		failedImages = sets.NewString()
 		theContainers = sets.NewString()
 
-		podSummary := types.NewSeveritySummary()
+		podSummary := api.NewSeveritySummary()
 
 		podContainers := [][]v1.ContainerStatus{
 			pod.Status.InitContainerStatuses,

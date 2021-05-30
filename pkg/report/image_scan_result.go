@@ -6,8 +6,8 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/alcideio/iskan/pkg/types"
 	"github.com/alcideio/iskan/pkg/util"
+	types "github.com/alcideio/iskan/pkg/vulnprovider/api"
 	"github.com/olekukonko/tablewriter"
 	"google.golang.org/genproto/googleapis/grafeas/v1"
 	"k8s.io/apimachinery/pkg/util/json"

@@ -2,6 +2,7 @@ package tests
 
 import (
 	"fmt"
+
 	"k8s.io/apimachinery/pkg/util/sets"
 
 	. "github.com/onsi/ginkgo"
@@ -14,16 +15,17 @@ import (
 	"github.com/alcideio/iskan/e2e/framework"
 	"github.com/alcideio/iskan/pkg/scan"
 	"github.com/alcideio/iskan/pkg/types"
+	api "github.com/alcideio/iskan/pkg/vulnprovider/api"
 )
 
-func ImageScanSanity(f *framework.Framework, config *types.VulnProvidersConfig, tags []string) {
+func ImageScanSanity(f *framework.Framework, config *api.VulnProvidersConfig, tags []string) {
 	Context("API Provider Sanity", func() {
 		var err error
 		iterator := framework.NewTestImageIterator(framework.FilterByHasAnyTag(sets.NewString(tags...)))
 
 		for {
 			var scanner *scan.ImageScanner
-			var report *types.ImageScanResult
+			var report *api.ImageScanResult
 
 			info, hasMore := iterator.Next()
 			if !hasMore {

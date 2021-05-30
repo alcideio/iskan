@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/alcideio/iskan/pkg/scan"
 	"github.com/alcideio/iskan/pkg/types"
+	"github.com/alcideio/iskan/pkg/vulnprovider/api"
 	"time"
 
 	"github.com/onsi/ginkgo"
@@ -95,7 +96,7 @@ func (f *Framework) AfterEach() {
 	Logf("Deleted test namespace '%v'", f.Namespace)
 }
 
-func (f *Framework) NewImageScannerWithConfig(policy *types.Policy, config *types.VulnProvidersConfig) *scan.ImageScanner {
+func (f *Framework) NewImageScannerWithConfig(policy *types.Policy, config *api.VulnProvidersConfig) *scan.ImageScanner {
 	var err error
 
 	if policy == nil {
@@ -113,7 +114,7 @@ func (f *Framework) NewImageScannerWithConfig(policy *types.Policy, config *type
 func (f *Framework) NewImageScanner(policy *types.Policy) *scan.ImageScanner {
 	var err error
 
-	config, err := types.LoadVulnProvidersConfigFromBuffer([]byte(GlobalConfig.ApiConfigFile))
+	config, err := api.LoadVulnProvidersConfigFromBuffer([]byte(GlobalConfig.ApiConfigFile))
 	ExpectNoError(err)
 
 	return f.NewImageScannerWithConfig(policy, config)
@@ -122,13 +123,13 @@ func (f *Framework) NewImageScanner(policy *types.Policy) *scan.ImageScanner {
 func (f *Framework) NewClusterScanner(policy *types.Policy) *scan.ClusterScanner {
 	var err error
 
-	config, err := types.LoadVulnProvidersConfigFromBuffer([]byte(GlobalConfig.ApiConfigFile))
+	config, err := api.LoadVulnProvidersConfigFromBuffer([]byte(GlobalConfig.ApiConfigFile))
 	ExpectNoError(err)
 
 	return f.NewClusterScannerWithConfig(policy, config)
 }
 
-func (f *Framework) NewClusterScannerWithConfig(policy *types.Policy, config *types.VulnProvidersConfig) *scan.ClusterScanner {
+func (f *Framework) NewClusterScannerWithConfig(policy *types.Policy, config *api.VulnProvidersConfig) *scan.ClusterScanner {
 	var err error
 
 	if policy == nil {

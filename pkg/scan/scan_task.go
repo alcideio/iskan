@@ -2,21 +2,23 @@ package scan
 
 import (
 	"fmt"
-	"github.com/fatih/color"
-	"k8s.io/client-go/util/flowcontrol"
 	"strings"
 	"sync"
 
 	"github.com/alcideio/iskan/pkg/types"
 	"github.com/alcideio/iskan/pkg/util"
 	"github.com/alcideio/iskan/pkg/vulnprovider"
+	"github.com/alcideio/iskan/pkg/vulnprovider/api"
+
+	"github.com/fatih/color"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/util/errors"
 	"k8s.io/apimachinery/pkg/util/sets"
+	"k8s.io/client-go/util/flowcontrol"
 	"k8s.io/klog"
 )
 
-func RegistryConfigForImage(image string, registriesConfig map[string]*types.VulnProviderConfig) *types.VulnProviderConfig {
+func RegistryConfigForImage(image string, registriesConfig map[string]*api.VulnProviderConfig) *api.VulnProviderConfig {
 	repo, _, _, _ := util.ParseImageName(image)
 
 	if config, exist := registriesConfig[repo]; exist {
@@ -24,7 +26,7 @@ func RegistryConfigForImage(image string, registriesConfig map[string]*types.Vul
 		return config
 	}
 
-	var c *types.VulnProviderConfig = nil
+	var c *api.VulnProviderConfig = nil
 	for registry, config := range registriesConfig {
 		if strings.Contains(repo, registry) || registry == "*" {
 			if c == nil || c.Repository == "*" && registry != "*" {
@@ -47,12 +49,12 @@ func RegistryConfigForImage(image string, registriesConfig map[string]*types.Vul
 		klog.V(5).Infof("Failed to detect registry kind from image name - %v", repo)
 	}
 
-	return &types.VulnProviderConfig{
+	return &api.VulnProviderConfig{
 		Kind: kind,
 	}
 }
 
-func ScanTask(pods []v1.Pod, policy *types.Policy, registriesConfig map[string]*types.VulnProviderConfig, flowControl flowcontrol.RateLimiter) (*types.ScanTaskResult, error) {
+func ScanTask(pods []v1.Pod, policy *types.Policy, registriesConfig map[string]*api.VulnProviderConfig, flowControl flowcontrol.RateLimiter) (*types.ScanTaskResult, error) {
 	scanTaskREsult := &types.ScanTaskResult{
 		Findings:    nil,
 		ScannedPods: []*v1.Pod{},
@@ -113,14 +115,14 @@ func ScanTask(pods []v1.Pod, policy *types.Policy, registriesConfig map[string]*
 
 	images := containers.List()
 	wg := sync.WaitGroup{}
-	results := map[string]*types.ImageScanResult{}
+	results := map[string]*api.ImageScanResult{}
 	resLock := sync.Mutex{}
 
 	for _, image := range images {
 		regConfig := RegistryConfigForImage(image, registriesConfig)
 		util.ConsolePrinter(fmt.Sprintf("Get vulnerability info for '%v' using '%v'", color.HiBlueString(image), color.HiGreenString(regConfig.Kind)))
 		wg.Add(1)
-		go func(image string, regConfig *types.VulnProviderConfig) {
+		go func(image string, regConfig *api.VulnProviderConfig) {
 			defer wg.Done()
 
 			res, err := ScanImage(image, policy, regConfig, flowControl)

@@ -6,6 +6,7 @@ import (
 	"github.com/alcideio/iskan/pkg/kube"
 	"github.com/alcideio/iskan/pkg/types"
 	"github.com/alcideio/iskan/pkg/util"
+	"github.com/alcideio/iskan/pkg/vulnprovider/api"
 	"github.com/kylelemons/godebug/pretty"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/util/errors"
@@ -16,7 +17,7 @@ import (
 
 type ClusterScanner struct {
 	Policy          *types.Policy
-	ProvidersConfig types.VulnProvidersConfig
+	ProvidersConfig api.VulnProvidersConfig
 
 	client *kube.KubeClient
 
@@ -25,7 +26,7 @@ type ClusterScanner struct {
 	flowControl flowcontrol.RateLimiter
 }
 
-func NewClusterScanner(clusterContext string, policy *types.Policy, providersConfig *types.VulnProvidersConfig) (*ClusterScanner, error) {
+func NewClusterScanner(clusterContext string, policy *types.Policy, providersConfig *api.VulnProvidersConfig) (*ClusterScanner, error) {
 	client, err := kube.NewClient(clusterContext)
 	if err != nil {
 		return nil, fmt.Errorf("Failed to create kubernetes client - %v", err)
@@ -61,10 +62,10 @@ func (cs *ClusterScanner) generateSummary(res *types.ScanTaskResult) (*types.Clu
 	failedImages := sets.NewString()
 
 	for _, pod := range res.ScannedPods {
-		var podSummary, fixableSummary types.SeveritySummary
+		var podSummary, fixableSummary api.SeveritySummary
 
-		podSummary = types.NewSeveritySummary()
-		fixableSummary = types.NewSeveritySummary()
+		podSummary = api.NewSeveritySummary()
+		fixableSummary = api.NewSeveritySummary()
 
 		podContainers := [][]v1.ContainerStatus{
 			pod.Status.InitContainerStatuses,
@@ -117,7 +118,7 @@ func (cs *ClusterScanner) generateSummary(res *types.ScanTaskResult) (*types.Clu
 
 			nsSummary, exist := summary.NamespaceSeverity[pod.Namespace]
 			if !exist {
-				nsSummary = types.NewSeveritySummary()
+				nsSummary = api.NewSeveritySummary()
 			}
 			nsSummary.Add(podSummary)
 			summary.NamespaceSeverity[pod.Namespace] = nsSummary
@@ -139,7 +140,7 @@ func (cs *ClusterScanner) Scan() (*types.ClusterScanReport, error) {
 		return nil, fmt.Errorf("Failed to list pods - %v", err)
 	}
 
-	providersConfig := map[string]*types.VulnProviderConfig{}
+	providersConfig := map[string]*api.VulnProviderConfig{}
 	for i, r := range cs.ProvidersConfig.Providers {
 		providersConfig[r.Repository] = &cs.ProvidersConfig.Providers[i]
 	}

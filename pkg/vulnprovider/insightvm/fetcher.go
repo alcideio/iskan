@@ -12,8 +12,8 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/alcideio/iskan/pkg/types"
 	"github.com/alcideio/iskan/pkg/util"
+	types "github.com/alcideio/iskan/pkg/vulnprovider/api"
 
 	insightvm "github.com/alcideio/iskan/pkg/vulnprovider/insightvm/client"
 )

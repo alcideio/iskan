@@ -3,28 +3,30 @@ package scan
 import (
 	"context"
 	"fmt"
+
 	"github.com/kylelemons/godebug/pretty"
 	"k8s.io/client-go/util/flowcontrol"
+	"k8s.io/klog"
 
 	"github.com/alcideio/iskan/pkg/types"
 	"github.com/alcideio/iskan/pkg/vulnprovider"
+	"github.com/alcideio/iskan/pkg/vulnprovider/api"
 	"google.golang.org/genproto/googleapis/grafeas/v1"
-	"k8s.io/klog"
 )
 
-func ScanImage(image string, policy *types.Policy, config *types.VulnProviderConfig, flowControl flowcontrol.RateLimiter) (*types.ImageScanResult, error) {
+func ScanImage(image string, policy *types.Policy, config *api.VulnProviderConfig, flowControl flowcontrol.RateLimiter) (*api.ImageScanResult, error) {
 
 	//Apply Ratelimits
 	flowControl.Accept()
 
 	klog.V(10).Infof("[image=%v][%+v]", image, *policy)
-	summary := types.NewSeveritySummary()
-	fixable := types.NewSeveritySummary()
+	summary := api.NewSeveritySummary()
+	fixable := api.NewSeveritySummary()
 
 	s, err := vulnprovider.NewImageVulnerabilitiesFinder(config.Kind, &config.Creds)
 	if err != nil {
 		klog.V(5).Infof("[image=%v] failed to create vuln provider client - %v", image, err)
-		return &types.ImageScanResult{
+		return &api.ImageScanResult{
 			Image:       image,
 			CompletedOK: false,
 			Reason:      err.Error(),
@@ -37,7 +39,7 @@ func ScanImage(image string, policy *types.Policy, config *types.VulnProviderCon
 	res, err := s.ListOccurrences(context.Background(), image)
 	if err != nil {
 		klog.V(5).Infof("[image=%v] failed to list findings - %v", image, err)
-		return &types.ImageScanResult{
+		return &api.ImageScanResult{
 			Image:       image,
 			CompletedOK: false,
 			Reason:      err.Error(),
@@ -49,7 +51,7 @@ func ScanImage(image string, policy *types.Policy, config *types.VulnProviderCon
 
 	filter := RuntimeResultFilter
 	filtered := []*grafeas.Occurrence{}
-	result := &types.ImageScanResult{
+	result := &api.ImageScanResult{
 		Image:       image,
 		CompletedOK: res.CompletedOK,
 		Reason:      res.Reason,
@@ -80,12 +82,12 @@ func ScanImage(image string, policy *types.Policy, config *types.VulnProviderCon
 type ImageScanner struct {
 	Policy *types.Policy
 
-	ProvidersConfig types.VulnProvidersConfig
+	ProvidersConfig api.VulnProvidersConfig
 
 	flowControl flowcontrol.RateLimiter
 }
 
-func NewImageScanner(policy *types.Policy, providersConfig *types.VulnProvidersConfig) (*ImageScanner, error) {
+func NewImageScanner(policy *types.Policy, providersConfig *api.VulnProvidersConfig) (*ImageScanner, error) {
 	var ratelimiter flowcontrol.RateLimiter
 
 	if policy == nil || providersConfig == nil {
@@ -110,9 +112,9 @@ func NewImageScanner(policy *types.Policy, providersConfig *types.VulnProvidersC
 	}, nil
 }
 
-func (is *ImageScanner) Scan(image string) (*types.ImageScanResult, error) {
+func (is *ImageScanner) Scan(image string) (*api.ImageScanResult, error) {
 
-	regsConfig := map[string]*types.VulnProviderConfig{}
+	regsConfig := map[string]*api.VulnProviderConfig{}
 	for i, r := range is.ProvidersConfig.Providers {
 		regsConfig[r.Repository] = &is.ProvidersConfig.Providers[i]
 	}

@@ -9,8 +9,8 @@ import (
 
 	containeranalysis "cloud.google.com/go/containeranalysis/apiv1"
 	grafeas "cloud.google.com/go/grafeas/apiv1"
-	"github.com/alcideio/iskan/pkg/types"
 	"github.com/alcideio/iskan/pkg/util"
+	types "github.com/alcideio/iskan/pkg/vulnprovider/api"
 	"github.com/docker/distribution/reference"
 	"google.golang.org/api/iterator"
 	grafeaspb "google.golang.org/genproto/googleapis/grafeas/v1"

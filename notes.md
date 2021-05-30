@@ -18,6 +18,7 @@ iskan cluster --cluster-context mycluster --api-config myconfig.yaml
 
 # Get vulnerability information for a specific image
 iskan image --image="gcr.io/myproj/path/to/myimage:v1.0" --api-config myconfig.yaml -f table --filter-severity CRITICAL,HIGH
+```
 
 ##### Vulnerabilities Provider API References
 
@@ -31,4 +32,3 @@ iskan image --image="gcr.io/myproj/path/to/myimage:v1.0" --api-config myconfig.y
 | **Trivy** | [Trivy on GitHub](https://github.com/aquasecurity/trivy)|
 
 
-```
