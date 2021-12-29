@@ -17,7 +17,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v1
         with:
-          go-version: 1.13
+          go-version: 1.16
       - name: Launch Cluster
         uses: helm/kind-action@v1.0.0
         with:
