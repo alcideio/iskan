@@ -1,6 +1,6 @@
 module github.com/alcideio/iskan
 
-go 1.13
+go 1.16
 
 require (
 	cloud.google.com/go v0.65.0
