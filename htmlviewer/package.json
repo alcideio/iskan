@@ -28,7 +28,7 @@
     "@testing-library/user-event": "^7.1.2",
     "bootstrap": "^4.4.1",
     "css-loader": "^3.5.3",
-    "file-loader": "^6.0.0",
+    "file-loader": "^6.2.0",
     "log-timestamp": "^0.3.0",
     "material-table": "^1.69.0",
     "node-sass": "^7.0.1",
