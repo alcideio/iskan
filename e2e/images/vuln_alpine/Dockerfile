@@ -1,7 +1,7 @@
 FROM k8s.gcr.io/pause AS pause
 
 #An old alpine image
-FROM alpine:3.11.0
+FROM alpine:3.13.9
 COPY --from=pause /pause /pause
 
 RUN apk update && apk add bash
